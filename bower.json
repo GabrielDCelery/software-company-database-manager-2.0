@@ -1,0 +1,25 @@
+{
+  "name": "software-company-database-manager-2.0",
+  "description": "Database manager for Zeller LLC. 2.0",
+  "main": "index.js",
+  "authors": [
+    "Gabriel D. Celery <gabriel.d.celery@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/GabrielDCelery/software-company-database-manager-2.0",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "angular": "~1.4.8",
+    "bootstrap": "~3.3.6",
+    "angular-route": "~1.4.8",
+    "normalize-css": "normalize.css#~3.0.3"
+  }
+}
