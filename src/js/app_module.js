@@ -1,1 +1,8 @@
-console.log('app_module.js is running...');
+
+var DatabaseApp = angular.module('DatabaseApp', [
+	'ngRoute',
+	'ngCookies',
+	'AuthCtrl',
+	'AuthFactory'
+]);
+

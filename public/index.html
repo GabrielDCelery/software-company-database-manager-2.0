@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="DatabaseApp">
 <head>
 
 	<title></title>
@@ -11,11 +11,53 @@
 	<script type="text/javascript" src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="lib/angular/angular.min.js"></script>
 	<script type="text/javascript" src="lib/angular-route/angular-route.min.js"></script>
+	<script type="text/javascript" src="lib/angular-cookies/angular-cookies.min.js"></script>
 	<script type="text/javascript" src="js/app.min.js"></script>
+
+	<meta charset="UTF-8">
 
 </head>
 
-<body>
+<body ng-controller="AuthCtrl">
+
+	<!-- MAIN NAVBAR -->
+	<nav class="navbar navbar-inverse navbar-fixed-top" ng-if="loggedIn">
+		<div class="container-fluid">
+	    	<ul class="nav navbar-nav">
+	    		<li><a href="#">Szerződések</a></li>
+	    		<li><a href="#">Levelezés</a></li>
+	    	</ul>
+	    	<ul class="nav navbar-nav navbar-right">
+	    		<li><a href="" ng-click="logout()">Kijelentkezés</a></li>
+	    	</ul>
+		</div>
+	</nav><!-- MAIN NAVBAR / END -->
+
+	<!-- LOGIN FORM -->
+	<div class="container">
+		<div class="jumbotron" ng-hide="loggedIn">
+			<form>
+				<div class="form-group form-group-lg">
+					<label for="username">
+						FELHASZNÁLÓ
+					</label>
+					<input type="text" class="form-control" id="username" placeholder="FELHASZNÁLÓ" ng-model="user.username">
+				</div>
+				<div class="form-group form-group-lg">
+					<label for="password">
+						JELSZÓ
+					</label>
+					<input type="password" class="form-control" id="password" placeholder="JELSZÓ" ng-model="user.password">
+				</div>
+				<button type="submit" class="btn btn-default btn-lg btn-primary" ng-click="login(user.username, user.password)">
+					BEJELENTKEZÉS
+				</button>
+			</form>
+		</div>
+	</div><!-- LOGIN FORM / END -->
+
+	<div class="container">
+	</div>
 
 
 </body>

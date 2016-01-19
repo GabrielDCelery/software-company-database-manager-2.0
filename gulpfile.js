@@ -12,7 +12,7 @@ CSS
 gulp.task('less', function() {
   return gulp.src('src/less/app.less')
     .pipe(less())
-    .pipe(gulp.dest('public/css/app.css'));
+    .pipe(gulp.dest('public/css'));
 });
 
 gulp.task('minifyCss', ['less'], function() {
@@ -28,7 +28,9 @@ JAVASCRIPT
 
 gulp.task('concatJs', function() {
 	return gulp.src([
-		'src/js/app_module.js'
+		'src/js/app_module.js',
+		'src/js/_controller_auth.js',
+		'src/js/_factory_auth.js'
 		])
 	.pipe(concat('app.js'))
 	.pipe(gulp.dest('public/js'));
