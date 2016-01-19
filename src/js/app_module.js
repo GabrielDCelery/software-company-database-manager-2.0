@@ -7,18 +7,19 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'CompaniesCtrl',
 	'CompaniesFactory',
 	'MailingCtrl',
-	'MailingFactory'
+	'MailingFactory',
+	'SubMenuFactory'
 ]);
 
 DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
 
 	$routeProvider
 	.when('/companies', {
-		templateUrl: 'templates/_companies_main.html',
+		templateUrl: 'templates/companies/_companies_main.html',
 		controller: 'CompaniesCtrl'
 	})
 	.when('/mailing', {
-		templateUrl: 'templates/_mailing_main.html',
+		templateUrl: 'templates/mailing/_mailing_main.html',
 		controller: 'MailingCtrl'
 	})
 	.otherwise({

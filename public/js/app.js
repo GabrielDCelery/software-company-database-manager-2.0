@@ -7,18 +7,19 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'CompaniesCtrl',
 	'CompaniesFactory',
 	'MailingCtrl',
-	'MailingFactory'
+	'MailingFactory',
+	'SubMenuFactory'
 ]);
 
 DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
 
 	$routeProvider
 	.when('/companies', {
-		templateUrl: 'templates/_companies_main.html',
+		templateUrl: 'templates/companies/_companies_main.html',
 		controller: 'CompaniesCtrl'
 	})
 	.when('/mailing', {
-		templateUrl: 'templates/_mailing_main.html',
+		templateUrl: 'templates/mailing/_mailing_main.html',
 		controller: 'MailingCtrl'
 	})
 	.otherwise({
@@ -217,21 +218,126 @@ AuthFactory.factory('AuthFactory', ['$http', '$cookies', function ($http, $cooki
 
 var CompaniesCtrl = angular.module('CompaniesCtrl', []);
 
-CompaniesCtrl.controller('CompaniesCtrl', ['$scope', function ($scope){
+CompaniesCtrl.controller('CompaniesCtrl', ['$scope', 'subMenu', function ($scope, subMenu){
+
+/****************************************************************************
+VARIABLES
+****************************************************************************/
+
+	$scope.display = {
+		form: {
+			searchCompany: false,
+			sendEmail: false,
+			showDetails: false,
+			extendContract: false,
+			addNewCompany: false
+		}
+	}
+
+	/* Master objects */
+
+	var display = angular.copy($scope.display);
+
+/****************************************************************************
+FUNCTIONS
+****************************************************************************/
+
+	function menu(property){
+		subMenu.displayContent($scope.display.form, property, function(data){
+			$scope.display.form = data;
+		})
+	}
+
+	function reset(){
+		$scope.display = angular.copy(display);
+	}
+
+/****************************************************************************
+BINDING FUNCTIONS
+****************************************************************************/
+
+	$scope.menu = menu;
+	$scope.reset = reset;
+
+
 
 }]);
 var CompaniesFactory = angular.module('CompaniesFactory', []);
 
-CompaniesFactory.factory('CompaniesFactory', ['$http', function ($http){
+CompaniesFactory.factory('CompaniesFactory', [function (){
+
+
 
 }]);
 var MailingCtrl = angular.module('MailingCtrl', []);
 
-MailingCtrl.controller('MailingCtrl', ['$scope', function ($scope){
+MailingCtrl.controller('MailingCtrl', ['$scope', 'subMenu', function ($scope, subMenu){
+
+/****************************************************************************
+VARIABLES
+****************************************************************************/
+
+	$scope.display = {
+		form: {
+			searchMails: false,
+			forwardMails: false,
+			editMails: false,
+			addNewMails: false
+		}
+	}
+
+	/* Master objects */
+
+	var display = angular.copy($scope.display);
+
+/****************************************************************************
+FUNCTIONS
+****************************************************************************/
+
+	function menu(property){
+		subMenu.displayContent($scope.display.form, property, function(data){
+			$scope.display.form = data;
+		})
+	}
+
+	function reset(){
+		$scope.display = angular.copy(display);
+	}
+
+/****************************************************************************
+BINDING FUNCTIONS
+****************************************************************************/
+
+	$scope.menu = menu;
+	$scope.reset = reset;
+
+
+
 
 }]);
 var MailingFactory = angular.module('MailingFactory', []);
 
 MailingFactory.factory('MailingFactory', ['$http', function ($http){
+
+}]);
+var SubMenuFactory = angular.module('SubMenuFactory', []);
+
+SubMenuFactory.factory('subMenu', [function (){
+
+	function displayContent(object, propertyName, callback){
+		for(var key in object){
+			if(key == propertyName){
+				object[key] = true;
+			} else {
+				object[key] = false;
+			}
+		}
+		callback(object)
+	}
+
+	return {
+		displayContent: displayContent
+	}
+
 
 }]);
