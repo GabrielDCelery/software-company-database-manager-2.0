@@ -4,6 +4,8 @@
 
 	<title></title>
 
+	<base href="/">
+
 	<link rel="stylesheet" type="text/css" href="lib/normalize-css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.min.css">
 
@@ -20,45 +22,9 @@
 
 <body ng-controller="AuthCtrl">
 
-	<!-- MAIN NAVBAR -->
-	<nav class="navbar navbar-inverse navbar-fixed-top" ng-if="loggedIn">
-		<div class="container-fluid">
-	    	<ul class="nav navbar-nav">
-	    		<li><a href="#">Szerződések</a></li>
-	    		<li><a href="#">Levelezés</a></li>
-	    	</ul>
-	    	<ul class="nav navbar-nav navbar-right">
-	    		<li><a href="" ng-click="logout()">Kijelentkezés</a></li>
-	    	</ul>
-		</div>
-	</nav><!-- MAIN NAVBAR / END -->
-
-	<!-- LOGIN FORM -->
-	<div class="container">
-		<div class="jumbotron" ng-hide="loggedIn">
-			<form>
-				<div class="form-group form-group-lg">
-					<label for="username">
-						FELHASZNÁLÓ
-					</label>
-					<input type="text" class="form-control" id="username" placeholder="FELHASZNÁLÓ" ng-model="user.username">
-				</div>
-				<div class="form-group form-group-lg">
-					<label for="password">
-						JELSZÓ
-					</label>
-					<input type="password" class="form-control" id="password" placeholder="JELSZÓ" ng-model="user.password">
-				</div>
-				<button type="submit" class="btn btn-default btn-lg btn-primary" ng-click="login(user.username, user.password)">
-					BEJELENTKEZÉS
-				</button>
-			</form>
-		</div>
-	</div><!-- LOGIN FORM / END -->
-
-	<div class="container">
-	</div>
-
+	<div ng-include="'templates/_main_navbar.html'" ng-if="loggedIn"></div><!-- MAIN NAVBAR -->
+	<div class="container" ng-include="'templates/_main_login.html'" ng-hide="loggedIn"></div><!-- LOGIN FORM -->
+	<div class="container" ng-view ng-if="loggedIn"></div>
 
 </body>
 

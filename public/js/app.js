@@ -3,10 +3,31 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'ngRoute',
 	'ngCookies',
 	'AuthCtrl',
-	'AuthFactory'
+	'AuthFactory',
+	'CompaniesCtrl',
+	'CompaniesFactory',
+	'MailingCtrl',
+	'MailingFactory'
 ]);
 
+DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
 
+	$routeProvider
+	.when('/companies', {
+		templateUrl: 'templates/_companies_main.html',
+		controller: 'CompaniesCtrl'
+	})
+	.when('/mailing', {
+		templateUrl: 'templates/_mailing_main.html',
+		controller: 'MailingCtrl'
+	})
+	.otherwise({
+		redirectTo: '/'
+	})
+
+	$locationProvider.html5Mode(true);
+
+}]);
 
 var AuthCtrl = angular.module('AuthCtrl', []);
 
@@ -193,3 +214,24 @@ AuthFactory.factory('AuthFactory', ['$http', '$cookies', function ($http, $cooki
 
 }]);
 
+
+var CompaniesCtrl = angular.module('CompaniesCtrl', []);
+
+CompaniesCtrl.controller('CompaniesCtrl', ['$scope', function ($scope){
+
+}]);
+var CompaniesFactory = angular.module('CompaniesFactory', []);
+
+CompaniesFactory.factory('CompaniesFactory', ['$http', function ($http){
+
+}]);
+var MailingCtrl = angular.module('MailingCtrl', []);
+
+MailingCtrl.controller('MailingCtrl', ['$scope', function ($scope){
+
+}]);
+var MailingFactory = angular.module('MailingFactory', []);
+
+MailingFactory.factory('MailingFactory', ['$http', function ($http){
+
+}]);

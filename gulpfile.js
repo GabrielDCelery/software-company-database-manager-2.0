@@ -30,7 +30,11 @@ gulp.task('concatJs', function() {
 	return gulp.src([
 		'src/js/app_module.js',
 		'src/js/_controller_auth.js',
-		'src/js/_factory_auth.js'
+		'src/js/_factory_auth.js',
+		'src/js/_controller_companies.js',
+		'src/js/_factory_companies.js',
+		'src/js/_controller_mailing.js',
+		'src/js/_factory_mailing.js'
 		])
 	.pipe(concat('app.js'))
 	.pipe(gulp.dest('public/js'));
