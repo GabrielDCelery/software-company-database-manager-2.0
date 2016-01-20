@@ -2,6 +2,7 @@
 var DatabaseApp = angular.module('DatabaseApp', [
 	'ngRoute',
 	'ngCookies',
+	'checklist-model',
 	'AuthCtrl',
 	'AuthFactory',
 	'CompaniesCtrl',

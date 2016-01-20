@@ -57,6 +57,16 @@ VARIABLES
 	$scope.sortField = 'company_name';
 	$scope.reverseSortField = false;
 
+	/* Detailed companies info */
+
+	$scope.companiesDetailed = [];
+
+	/* Object holding the information of checkboxes */
+	$scope.selectedCompanies = {
+		id: [],
+		allChecked: false
+	}
+
 	/* Master objects */
 
 	var display = angular.copy($scope.display);
