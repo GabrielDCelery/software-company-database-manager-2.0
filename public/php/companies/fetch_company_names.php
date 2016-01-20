@@ -4,10 +4,7 @@
 DEPENDENCIES
 ************************************************************/
 
-$path = $_SERVER['DOCUMENT_ROOT'];
-$path .= 'settings.php';
-
-require($path);
+require '../../settings.php';
 
 /************************************************************
 DATABASE CONNECTION
