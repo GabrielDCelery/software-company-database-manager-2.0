@@ -1,1 +1,20 @@
-data
+<table class="table table-bordered">
+	<tr class="info">
+		<td><input type="checkbox"></td>
+		<td ng-click="sortField = 'company_name'; reverseSortField = !reverseSortField">CÉG NEVE</td>
+		<td ng-click="sortField = 'company_email'; reverseSortField = !reverseSortField">EMAIL</td>
+		<td ng-click="sortField = 'company_phone'; reverseSortField = !reverseSortField">TELEFON</td>
+		<td ng-click="sortField = 'postal_number'; reverseSortField = !reverseSortField">POSTAI MEGHAT.</td>
+		<td ng-click="sortField = 'starting_date'; reverseSortField = !reverseSortField">KEZDŐ DÁTUM</td>
+		<td ng-click="sortField = 'ending_date'; reverseSortField = !reverseSortField">ZÁRÓ DÁTUM</td>
+	</tr>
+	<tr ng-repeat="company in companiesShortList | orderBy:sortField:reverseSortField">
+		<td><input type="checkbox"></td>
+		<td>{{company.company_name}}</td>
+		<td>{{company.company_email}}</td>
+		<td>{{company.company_phone}}</td>
+		<td>{{company.postal_number}}</td>
+		<td>{{company.starting_date}}</td>
+		<td>{{company.ending_date}}</td>
+	</tr>
+</table>

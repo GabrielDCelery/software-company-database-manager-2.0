@@ -223,12 +223,14 @@ CompaniesCtrl.controller('CompaniesCtrl', [
 	'$scope', 
 	'$http',
 	'subMenu', 
-	'filteredSearch', 
+	'filteredSearch',
+	'CompaniesFunctions',
 	function (
 		$scope, 
 		$http,
 		subMenu, 
-		filteredSearch
+		filteredSearch,
+		CompaniesFunctions
 	){
 
 /****************************************************************************
@@ -268,12 +270,18 @@ VARIABLES
 	$scope.filteredListOfCompanies = [];
 	$scope.filteredListOfManagers = [];
 
+	/* Short list of companies */
+
+	$scope.companiesShortList = [];
+	$scope.sortField = 'company_name';
+	$scope.reverseSortField = false;
+
 	/* Master objects */
 
 	var display = angular.copy($scope.display);
 
 /****************************************************************************
-FILTER COMPANY/MANAGER NAMES
+FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 ****************************************************************************/
 
 	function filterCompanyNames(input){
@@ -298,8 +306,24 @@ FILTER COMPANY/MANAGER NAMES
 		$scope.filteredListOfManagers = [];
 	};
 
+
 /****************************************************************************
-MENU FUNCTIONS
+FORM / SEARCH / SEARCH COMPANIES SHORT LIST
+****************************************************************************/
+
+	function formSearchCompaniesShortList(){
+
+		var data = $scope.form.searchCompany;
+
+		CompaniesFunctions.getCompanies(data, function(response){
+			console.log(response);
+			$scope.companiesShortList = response;
+		})
+
+	}
+
+/****************************************************************************
+MENU / FUNCTIONS
 ****************************************************************************/
 
 	function menu(property){
@@ -322,12 +346,22 @@ BINDING FUNCTIONS
 	$scope.filterListOfManagerNames = filterManagerNames;
 	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 	$scope.insertManagerNameToInputField = insertManagerNameToInputField;
+	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
 
 }]);
 var CompaniesFactory = angular.module('CompaniesFactory', []);
 
-CompaniesFactory.factory('CompaniesFactory', [function (){
+CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 
+	function getCompanies(data, callback){
+		$http.post('php/companies/form_search_companies.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+	return {
+		getCompanies: getCompanies
+	}
 
 
 }]);
