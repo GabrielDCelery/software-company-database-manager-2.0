@@ -94,11 +94,15 @@ FORM / SEARCH / SEARCH COMPANIES SHORT LIST
 
 	function formSearchCompaniesShortList(){
 
+		$scope.filteredListOfCompanies = [];
+		$scope.filteredListOfManagers = [];
+		
 		var data = $scope.form.searchCompany;
 
 		CompaniesFunctions.getCompanies(data, function(response){
-			console.log(response);
-			$scope.companiesShortList = response;
+			var dataObject = new CompaniesFunctions.DataFormatter(response);
+			dataObject.addColourCoding();
+			$scope.companiesShortList = dataObject.data;
 		})
 
 	}

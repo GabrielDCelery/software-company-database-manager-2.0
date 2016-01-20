@@ -312,11 +312,15 @@ FORM / SEARCH / SEARCH COMPANIES SHORT LIST
 
 	function formSearchCompaniesShortList(){
 
+		$scope.filteredListOfCompanies = [];
+		$scope.filteredListOfManagers = [];
+		
 		var data = $scope.form.searchCompany;
 
 		CompaniesFunctions.getCompanies(data, function(response){
-			console.log(response);
-			$scope.companiesShortList = response;
+			var dataObject = new CompaniesFunctions.DataFormatter(response);
+			dataObject.addColourCoding();
+			$scope.companiesShortList = dataObject.data;
 		})
 
 	}
@@ -358,7 +362,37 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		});
 	}
 
+	function DataFormatter(data){
+		this.data = data;
+	}
+
+	DataFormatter.prototype.addColourCoding = function(){
+		this.data.map(function(obj){
+			if (obj.contract_status == true && (obj.postal_number == "" || obj.postal_number == null)){
+				obj.css_color = "yellow";
+			} else if (obj.contract_status == true){
+				obj.css_color = "green";
+			} else {
+				obj.css_color = "red";
+			}
+		})
+		return this;
+	}
+
+	DataFormatter.prototype.formatPostalServiceToString = function(){
+		this.data.map(function(obj){
+			if(obj.postal_service == 1){
+				obj.postal_service = 'igen';
+			} else {
+				obj.postal_service = 'nem';
+			}
+		})
+		return this;
+	}
+
+
 	return {
+		DataFormatter: DataFormatter,
 		getCompanies: getCompanies
 	}
 
