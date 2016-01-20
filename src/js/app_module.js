@@ -8,7 +8,8 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'CompaniesFactory',
 	'MailingCtrl',
 	'MailingFactory',
-	'SubMenuFactory'
+	'SubMenuFactory',
+	'FilteredSearchFactory'
 ]);
 
 DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){

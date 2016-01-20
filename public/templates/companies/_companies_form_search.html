@@ -1,1 +1,56 @@
-form-search
+<div class="jumbotron">
+	<form>
+		<div class="form-group row">
+			<label class="col-sm-2" for="company-name">Cég neve</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="company-name" placeholder="Cég neve" ng-model="form.searchCompany.companyName" ng-keyup="filterListOfCompanyNames(form.searchCompany.companyName)">
+			</div>
+			<label class="col-sm-2" for="company-leader">Ügyvezető neve</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="company-leader" placeholder="Ügyvezető neve" ng-model="form.searchCompany.managerName" ng-keyup="filterListOfManagerNames(form.searchCompany.managerName)">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2">Lejárat intervalluma</label>
+			<div class="col-sm-5">
+				<input type="date" class="form-control" ng-model="form.searchCompany.startingDate">
+			</div>
+			<div class="col-sm-5">
+				<input type="date" class="form-control" ng-model="form.searchCompany.endingDate">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-3">
+				<div class="checkbox">
+					<label><input type="checkbox" ng-model="form.searchCompany.validContract">Érvényes szerződés</label>
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="checkbox">
+					<label><input type="checkbox" ng-model="form.searchCompany.expiredContract">Lejárt szerződés</label>
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="checkbox">
+					<label><input type="checkbox" ng-model="form.searchCompany.lastContractOnly">Utolsó szerződés</label>
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<button type="submit" class="btn btn-default btn-lg btn-primary">Keresés</button>
+			</div>
+		</div>
+
+	</form>
+
+</div>
+
+<div>
+	<button type="button" class="btn btn-primary" ng-repeat="company in filteredListOfCompanies" ng-click="insertCompanyNameToInputField(company)">{{company}}</button>
+</div>
+
+<div>
+	<button type="button" class="btn btn-primary" ng-repeat="manager in filteredListOfManagers" ng-click="insertManagerNameToInputField(manager)">{{manager}}</button>
+</div>

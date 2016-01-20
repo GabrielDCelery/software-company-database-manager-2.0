@@ -8,7 +8,8 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'CompaniesFactory',
 	'MailingCtrl',
 	'MailingFactory',
-	'SubMenuFactory'
+	'SubMenuFactory',
+	'FilteredSearchFactory'
 ]);
 
 DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
@@ -218,11 +219,23 @@ AuthFactory.factory('AuthFactory', ['$http', '$cookies', function ($http, $cooki
 
 var CompaniesCtrl = angular.module('CompaniesCtrl', []);
 
-CompaniesCtrl.controller('CompaniesCtrl', ['$scope', 'subMenu', function ($scope, subMenu){
+CompaniesCtrl.controller('CompaniesCtrl', [
+	'$scope', 
+	'$http',
+	'subMenu', 
+	'filteredSearch', 
+	function (
+		$scope, 
+		$http,
+		subMenu, 
+		filteredSearch
+	){
 
 /****************************************************************************
 VARIABLES
 ****************************************************************************/
+
+	/* Object to control what's displayed on the screen and what's not */
 
 	$scope.display = {
 		form: {
@@ -234,23 +247,70 @@ VARIABLES
 		}
 	}
 
+	/* FormData */
+
+	$scope.form = {
+
+		searchCompany: {
+			companyName: "",
+			managerName: "",
+			validContract: true,
+			expiredContract: false,
+			startingDate: null,
+			endingDate: null,
+			lastContractOnly: true
+		}
+
+	}
+
+	/* Filtered lists while searching forcompanies and managers */
+
+	$scope.filteredListOfCompanies = [];
+	$scope.filteredListOfManagers = [];
+
 	/* Master objects */
 
 	var display = angular.copy($scope.display);
 
 /****************************************************************************
-FUNCTIONS
+FILTER COMPANY/MANAGER NAMES
+****************************************************************************/
+
+	function filterCompanyNames(input){
+		filteredSearch.filterCompanyNames(input, function(data){
+			$scope.filteredListOfCompanies = data;
+		})
+	};
+
+	function insertCompanyNameToInputField(companyName){
+		$scope.form.searchCompany.companyName = companyName;
+		$scope.filteredListOfCompanies = [];
+	};
+
+	function filterManagerNames(input){
+		filteredSearch.filterManagerNames(input, function(data){
+			$scope.filteredListOfManagers = data;
+		})
+	};
+
+	function insertManagerNameToInputField(managerName){
+		$scope.form.searchCompany.managerName = managerName;
+		$scope.filteredListOfManagers = [];
+	};
+
+/****************************************************************************
+MENU FUNCTIONS
 ****************************************************************************/
 
 	function menu(property){
 		subMenu.displayContent($scope.display.form, property, function(data){
 			$scope.display.form = data;
 		})
-	}
+	};
 
 	function reset(){
 		$scope.display = angular.copy(display);
-	}
+	};
 
 /****************************************************************************
 BINDING FUNCTIONS
@@ -258,8 +318,10 @@ BINDING FUNCTIONS
 
 	$scope.menu = menu;
 	$scope.reset = reset;
-
-
+	$scope.filterListOfCompanyNames = filterCompanyNames;
+	$scope.filterListOfManagerNames = filterManagerNames;
+	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
+	$scope.insertManagerNameToInputField = insertManagerNameToInputField;
 
 }]);
 var CompaniesFactory = angular.module('CompaniesFactory', []);
@@ -337,6 +399,67 @@ SubMenuFactory.factory('subMenu', [function (){
 
 	return {
 		displayContent: displayContent
+	}
+
+
+}]);
+var FilteredSearchFactory = angular.module('FilteredSearchFactory', []);
+
+FilteredSearchFactory.factory('filteredSearch', ['$http', function ($http){
+
+	var cachedCompanies;
+	var cachedManagers;
+
+	function getCompanies(callback){
+		if(cachedCompanies){
+			callback(cachedCompanies);
+		} else {
+			$http.get('php/companies/fetch_company_names.php').success(function(data){
+				cachedCompanies = data;
+				callback(data);
+			});
+		}
+	}
+
+	function getManagers(callback){
+		if(cachedManagers){
+			callback(cachedManagers);
+		} else {
+			$http.get('php/companies/fetch_manager_names.php').success(function(data){
+				cachedManagers = data;
+				callback(data);
+			});
+		}
+	}
+
+	function filter(input, arrayOfNames){
+		var listOfNames = arrayOfNames;
+		var filteredListOfNames = [];
+		if(input.length !==0){
+			for(var i = 0; i < listOfNames.length; i++){
+				if(listOfNames[i].substring(0, input.length).toLowerCase() === input.toLowerCase()){
+					filteredListOfNames.push(listOfNames[i]);
+				}
+			}
+		}
+		return filteredListOfNames;
+	}
+
+	function filterCompanyNames(input, callback){
+		getCompanies(function (data){
+			callback(filter(input, data));
+		});
+	}
+
+	function filterManagerNames(input, callback){
+		getManagers(function (data){
+			callback(filter(input, data));
+		});
+	}
+
+	return {
+		filterCompanyNames: filterCompanyNames,
+		filterManagerNames: filterManagerNames
 	}
 
 

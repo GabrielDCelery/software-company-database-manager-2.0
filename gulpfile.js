@@ -35,7 +35,8 @@ gulp.task('concatJs', function() {
 		'src/js/_factory_companies.js',
 		'src/js/_controller_mailing.js',
 		'src/js/_factory_mailing.js',
-		'src/js/_factory_submenu.js'
+		'src/js/_factory_submenu.js',
+		'src/js/_factory_filteredsearch.js'
 		])
 	.pipe(concat('app.js'))
 	.pipe(gulp.dest('public/js'));
