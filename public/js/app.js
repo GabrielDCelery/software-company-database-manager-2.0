@@ -27,7 +27,6 @@ DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvi
 		redirectTo: '/'
 	})
 
-	$locationProvider.html5Mode(true);
 
 }]);
 
