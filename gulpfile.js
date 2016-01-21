@@ -32,7 +32,7 @@ gulp.task('concatJs', function() {
 		'src/js/_controller_auth.js',
 		'src/js/_factory_auth.js',
 		'src/js/_controller_companies.js',
-		'src/js/_factory_companies.js',
+		'src/js/_factory_database.js',
 		'src/js/_controller_mailing.js',
 		'src/js/_factory_mailing.js',
 		'src/js/_factory_submenu.js',
