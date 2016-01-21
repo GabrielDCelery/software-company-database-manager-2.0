@@ -290,7 +290,8 @@ VARIABLES
 
 	/* Detailed companies info */
 
-	$scope.companiesDetailed = [];
+	$scope.companiesDetailedEdit = [];
+	$scope.companiesDetailedExtend = [];
 
 	/* Object holding the information of checkboxes */
 	$scope.selectedCompanies = {
@@ -358,7 +359,7 @@ FORM / DETAILS
 			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
 				var dataObject = new FormatData.DataObject(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
-				$scope.companiesDetailed = dataObject.data;
+				$scope.companiesDetailedEdit = dataObject.data;
 			})
 		})	
 	}
@@ -402,6 +403,31 @@ FORM / EXTEND
 		})
 	}
 
+	function formExtendContract(){
+		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
+			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
+				var dataObject = new FormatData.DataObject(response);
+				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
+				$scope.companiesDetailedExtend = dataObject.data;
+			})
+		})	
+	}
+
+
+	function addExtendedContract(data){
+
+		var array = [];
+		array.push(data);
+
+		var dataObject = new FormatData.DataObject(array);
+		dataObject.formatPostalServiceToBoolean();
+
+		CompaniesFunctions.extendContract(dataObject.data, function(response){
+
+			Alerts.checkSuccess(response);
+		})
+	}
+
 /****************************************************************************
 MENU / FUNCTIONS
 ****************************************************************************/
@@ -429,7 +455,9 @@ BINDING FUNCTIONS
 	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
 	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
 	$scope.overwriteCompanyData = overwriteCompanyData;
-	$scope.formChangeContractStatus =formChangeContractStatus;
+	$scope.formChangeContractStatus = formChangeContractStatus;
+	$scope.formExtendContract = formExtendContract;
+	$scope.addExtendedContract = addExtendedContract;
 
 }]);
 var CompaniesFactory = angular.module('CompaniesFactory', []);
@@ -460,11 +488,18 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		});
 	}
 
+	function extendContract(data, callback){
+		$http.post('php/companies/form_companies_extend_contract.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
 		overWriteCompanyData: overWriteCompanyData,
-		changeContractStatus: changeContractStatus
+		changeContractStatus: changeContractStatus,
+		extendContract: extendContract
 	}
 
 

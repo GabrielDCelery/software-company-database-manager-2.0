@@ -26,11 +26,18 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		});
 	}
 
+	function extendContract(data, callback){
+		$http.post('php/companies/form_companies_extend_contract.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
 		overWriteCompanyData: overWriteCompanyData,
-		changeContractStatus: changeContractStatus
+		changeContractStatus: changeContractStatus,
+		extendContract: extendContract
 	}
 
 

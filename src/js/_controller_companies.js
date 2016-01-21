@@ -69,7 +69,8 @@ VARIABLES
 
 	/* Detailed companies info */
 
-	$scope.companiesDetailed = [];
+	$scope.companiesDetailedEdit = [];
+	$scope.companiesDetailedExtend = [];
 
 	/* Object holding the information of checkboxes */
 	$scope.selectedCompanies = {
@@ -137,7 +138,7 @@ FORM / DETAILS
 			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
 				var dataObject = new FormatData.DataObject(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
-				$scope.companiesDetailed = dataObject.data;
+				$scope.companiesDetailedEdit = dataObject.data;
 			})
 		})	
 	}
@@ -181,6 +182,31 @@ FORM / EXTEND
 		})
 	}
 
+	function formExtendContract(){
+		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
+			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
+				var dataObject = new FormatData.DataObject(response);
+				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
+				$scope.companiesDetailedExtend = dataObject.data;
+			})
+		})	
+	}
+
+
+	function addExtendedContract(data){
+
+		var array = [];
+		array.push(data);
+
+		var dataObject = new FormatData.DataObject(array);
+		dataObject.formatPostalServiceToBoolean();
+
+		CompaniesFunctions.extendContract(dataObject.data, function(response){
+
+			Alerts.checkSuccess(response);
+		})
+	}
+
 /****************************************************************************
 MENU / FUNCTIONS
 ****************************************************************************/
@@ -208,6 +234,8 @@ BINDING FUNCTIONS
 	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
 	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
 	$scope.overwriteCompanyData = overwriteCompanyData;
-	$scope.formChangeContractStatus =formChangeContractStatus;
+	$scope.formChangeContractStatus = formChangeContractStatus;
+	$scope.formExtendContract = formExtendContract;
+	$scope.addExtendedContract = addExtendedContract;
 
 }]);

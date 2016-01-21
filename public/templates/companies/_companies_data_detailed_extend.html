@@ -1,0 +1,23 @@
+<div ng-repeat="company in companiesDetailedExtend">
+
+	<div class="btn-group btn-group-justified" role="group">
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-primary" ng-click="showForm = !showForm">SZERKESZT</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-primary" ng-click="resetCompanyDetailedForm()">VISSZAVONÁS</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-primary" ng-click="addExtendedContract(company)">SZERZŐDÉS HOSSZABBÍTÁS</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-primary" ng-click="newDocumentCover(company)">BORÍTÓ NYOMTATÁS</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-primary" ng-click="newDocumentContract(company)">SZERZŐDÉS NYOMTATÁS</button>
+		</div>	
+	</div>
+
+	<div ng-include="'templates/companies/_companies_data_detailed_form.html'"></div>
+
+</div>
