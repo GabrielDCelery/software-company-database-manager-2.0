@@ -135,7 +135,7 @@ FORM / DETAILS
 
 	function formGetDetailedCompaniesData(){
 
-		Alerts.isArrayEmpty($scope.selectedCompanies.id, $scope.selectedCompanies, function(data){
+		Alerts.isArrayEmpty($scope.selectedCompanies.id, $scope.selectedCompanies.id, function(data){
 			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
 				var dataObject = new FormatData.DataObject(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();

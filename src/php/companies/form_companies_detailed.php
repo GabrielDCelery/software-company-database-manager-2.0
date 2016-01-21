@@ -13,7 +13,7 @@ FETCHING DATA FROM REQUEST
 $postdata = file_get_contents("php://input");
 $dataobject = json_decode($postdata);
 
-$company_id_list = $dataobject->id;
+$company_id_list = $dataobject;
 
 /************************************************************
 DATABASE CONNECTION
