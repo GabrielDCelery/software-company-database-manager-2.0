@@ -83,6 +83,28 @@ VARIABLES
 	var display = angular.copy($scope.display);
 
 /****************************************************************************
+ENCAPSULATED FUNCTIONS
+****************************************************************************/
+
+	function getDetailedFormattedCompaniesData(callback){
+		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
+			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
+				var dataObject = new FormatData.DataObject(response);
+				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
+				callback(dataObject.data);
+			})
+		})	
+	}
+
+	function formatCompaniesDetailedDataForDatabase(data, callback){
+		var array = [];
+		array.push(data);
+		var dataObject = new FormatData.DataObject(array);
+		dataObject.formatPostalServiceToBoolean();
+		callback(dataObject.data);
+	}
+
+/****************************************************************************
 FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 ****************************************************************************/
 
@@ -134,30 +156,24 @@ FORM / DETAILS
 
 	function formGetDetailedCompaniesData(){
 
-		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
-			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
-				var dataObject = new FormatData.DataObject(response);
-				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
-				$scope.companiesDetailedEdit = dataObject.data;
-			})
-		})	
+		getDetailedFormattedCompaniesData(function(data){
+			$scope.companiesDetailedEdit = data;
+		})
+
 	}
 
 	/* Overwrite detailed company information */
 
 	function overwriteCompanyData(data){
 
-		var array = [];
-		array.push(data);
+		formatCompaniesDetailedDataForDatabase(data, function(data){
 
-		var dataObject = new FormatData.DataObject(array);
-		dataObject.formatPostalServiceToBoolean();
+			CompaniesFunctions.overWriteCompanyData(data, function(response){
 
-		CompaniesFunctions.overWriteCompanyData(dataObject.data, function(response){
+				Alerts.checkSuccess(response);
+				formGetDetailedCompaniesData();
 
-			Alerts.checkSuccess(response);
-			formGetDetailedCompaniesData();
-
+			})
 		})
 	
 	}
@@ -183,27 +199,17 @@ FORM / EXTEND
 	}
 
 	function formExtendContract(){
-		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
-			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
-				var dataObject = new FormatData.DataObject(response);
-				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
-				$scope.companiesDetailedExtend = dataObject.data;
-			})
-		})	
+		getDetailedFormattedCompaniesData(function(data){
+			$scope.companiesDetailedExtend = data;
+		})
 	}
 
 
 	function addExtendedContract(data){
-
-		var array = [];
-		array.push(data);
-
-		var dataObject = new FormatData.DataObject(array);
-		dataObject.formatPostalServiceToBoolean();
-
-		CompaniesFunctions.extendContract(dataObject.data, function(response){
-
-			Alerts.checkSuccess(response);
+		formatCompaniesDetailedDataForDatabase(data, function(data){
+			CompaniesFunctions.extendContract(data, function(response){
+				Alerts.checkSuccess(response);
+			})
 		})
 	}
 
