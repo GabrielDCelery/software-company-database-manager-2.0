@@ -5,12 +5,14 @@ CompaniesCtrl.controller('CompaniesCtrl', [
 	'$http',
 	'subMenu', 
 	'filteredSearch',
+	'FormatData',
 	'CompaniesFunctions',
 	function (
 		$scope, 
 		$http,
 		subMenu, 
 		filteredSearch,
+		FormatData,
 		CompaniesFunctions
 	){
 
@@ -116,7 +118,7 @@ FORM / SEARCH
 		var data = $scope.form.searchCompany;
 
 		CompaniesFunctions.getShortCompaniesData(data, function(response){
-			var dataObject = new CompaniesFunctions.DataFormatter(response);
+			var dataObject = new FormatData.DataObject(response);
 			dataObject.addColourCoding();
 			$scope.companiesShortList = dataObject.data;
 		})
@@ -140,7 +142,7 @@ FORM / DETAILS
 			var data = $scope.selectedCompanies;
 
 			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
-				var dataObject = new CompaniesFunctions.DataFormatter(response);
+				var dataObject = new FormatData.DataObject(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
 				$scope.companiesDetailed = dataObject.data;
 			})
@@ -155,7 +157,7 @@ FORM / DETAILS
 		var array = [];
 		array.push(data);
 
-		var dataObject = new CompaniesFunctions.DataFormatter(array);
+		var dataObject = new FormatData.DataObject(array);
 		dataObject.formatPostalServiceToBoolean();
 
 		CompaniesFunctions.overWriteCompanyData(dataObject.data, function(response){
