@@ -34,8 +34,9 @@ VARIABLES
 		},
 
 		data: {
-			short: true,
-			detailed: true
+			list: false,
+			edit: false,
+			extend: false
 		}
 
 	}
@@ -99,7 +100,7 @@ VARIABLES
 
 	/* Detailed companies info */
 
-	$scope.companiesDetailedEdit = [];
+	$scope.companyDataEdit = [];
 	$scope.companiesDetailedExtend = [];
 
 	/* Object holding the information of checkboxes */
@@ -116,7 +117,44 @@ VARIABLES
 ENCAPSULATED FUNCTIONS
 ****************************************************************************/
 
-	function getDetailedFormattedCompaniesData(callback){
+	function displayCompanyDataList(){
+		$scope.filteredListOfCompanies = [];
+		$scope.filteredListOfManagers = [];
+		$scope.selectedCompanies.id = [];
+		$scope.selectedCompanies.allChecked = false;
+		$scope.display.form.searchCompany = false;
+		$scope.display.form.sendEmail = false;
+		$scope.display.form.showDetails = false;
+		$scope.display.form.extendContract = false;
+		$scope.display.form.addNewCompany = false;
+		$scope.display.data.list = true;
+		$scope.display.data.edit = false;
+		$scope.display.data.extend = false;
+	}
+
+	function displayCompanyDataEdit(){
+		$scope.display.form.searchCompany = false;
+		$scope.display.form.sendEmail = false;
+		$scope.display.form.showDetails = false;
+		$scope.display.form.extendContract = false;
+		$scope.display.form.addNewCompany = false;
+		$scope.display.data.list = false;
+		$scope.display.data.edit = true;
+		$scope.display.data.extend = false;
+	}
+
+	function displayCompanyDataExtend(){
+		$scope.display.form.searchCompany = false;
+		$scope.display.form.sendEmail = false;
+		$scope.display.form.showDetails = false;
+		$scope.display.form.extendContract = false;
+		$scope.display.form.addNewCompany = false;
+		$scope.display.data.list = false;
+		$scope.display.data.edit = false;
+		$scope.display.data.extend = true;
+	}
+
+	function getDetailedFormattedCompanyData(callback){
 		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
 			Database.getDetailedCompaniesData(data, function(response){
 				var dataObject = new FormatData.DataObject(response);
@@ -126,7 +164,7 @@ ENCAPSULATED FUNCTIONS
 		})	
 	}
 
-	function formatCompaniesDetailedDataForDatabase(data, callback){
+	function formatCompanyDetailedDataForDatabase(data, callback){
 		var array = [];
 		array.push(data);
 		var dataObject = new FormatData.DataObject(array);
@@ -160,22 +198,17 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 		$scope.filteredListOfManagers = [];
 	};
 
-
 /****************************************************************************
 FORM / SEARCH
 ****************************************************************************/
 
-	function formSearchCompaniesShortList(searchParams){
-
-		$scope.filteredListOfCompanies = [];
-		$scope.filteredListOfManagers = [];
-		
+	function formGetCompanyDataList(searchParams){
 		Database.getShortCompaniesData(searchParams, function(response){
 			var dataObject = new FormatData.DataObject(response);
 			dataObject.addColourCoding();
 			$scope.companiesShortList = dataObject.data;
+			displayCompanyDataList();
 		})
-
 	}
 
 /****************************************************************************
@@ -184,30 +217,23 @@ FORM / DETAILS
 
 	/* Get detailed companies data */
 
-	function formGetDetailedCompaniesData(){
-
-		getDetailedFormattedCompaniesData(function(data){
-			$scope.companiesDetailedEdit = data;
+	function formGetCompanyDataEdit(){
+		getDetailedFormattedCompanyData(function(data){
+			$scope.companyDataEdit = data;
+			displayCompanyDataEdit();
 		})
-
 	}
 
 	/* Overwrite detailed company information */
 
 	function overwriteCompanyData(data){
-
-		formatCompaniesDetailedDataForDatabase(data, function(data){
-
+		formatCompanyDetailedDataForDatabase(data, function(data){
 			Database.overWriteCompanyData(data, function(response){
-
 				Alerts.checkSuccess(response);
-				formGetDetailedCompaniesData();
-
+				formGetCompanyDataEdit();
 			})
-		})
-	
+		})	
 	}
-
 
 /****************************************************************************
 FORM / EXTEND
@@ -222,21 +248,21 @@ FORM / EXTEND
 						$scope.form.searchCompany.validContract = !$scope.form.searchCompany.validContract;
 						$scope.form.searchCompany.expiredContract = !$scope.form.searchCompany.expiredContract;
 					}
-					formSearchCompaniesShortList($scope.form.searchCompany);
+					formGetCompanyDataList($scope.form.searchCompany);
 				})
 			})
 		})
 	}
 
-	function formExtendContract(){
-		getDetailedFormattedCompaniesData(function(data){
+	function formGetCompanyDataExtend(){
+		getDetailedFormattedCompanyData(function(data){
 			$scope.companiesDetailedExtend = data;
+			displayCompanyDataExtend();
 		})
 	}
 
-
 	function addExtendedContract(data){
-		formatCompaniesDetailedDataForDatabase(data, function(data){
+		formatCompanyDetailedDataForDatabase(data, function(data){
 			Database.extendContract(data, function(response){
 				Alerts.checkSuccess(response);
 			})
@@ -248,7 +274,7 @@ FORM / ADDNEW
 ****************************************************************************/	
 
 	function addNewCompany(data){
-		formatCompaniesDetailedDataForDatabase(data, function(data){
+		formatCompanyDetailedDataForDatabase(data, function(data){
 			Database.addNewCompany(data, function(response){
 				Alerts.checkSuccess(response);
 			})
@@ -279,12 +305,13 @@ BINDING FUNCTIONS
 	$scope.filterListOfManagerNames = filterManagerNames;
 	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 	$scope.insertManagerNameToInputField = insertManagerNameToInputField;
-	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
-	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
+	$scope.formGetCompanyDataList = formGetCompanyDataList;
+	$scope.formGetCompanyDataEdit = formGetCompanyDataEdit;
 	$scope.overwriteCompanyData = overwriteCompanyData;
 	$scope.formChangeContractStatus = formChangeContractStatus;
-	$scope.formExtendContract = formExtendContract;
+	$scope.formGetCompanyDataExtend = formGetCompanyDataExtend;
 	$scope.addExtendedContract = addExtendedContract;
 	$scope.addNewCompany = addNewCompany;
+	$scope.displayCompanyDataList = displayCompanyDataList;
 
 }]);
