@@ -1,6 +1,6 @@
 var SubMenuFactory = angular.module('SubMenuFactory', []);
 
-SubMenuFactory.factory('subMenu', [function (){
+SubMenuFactory.factory('SubMenu', [function (){
 
 	function displayContent(object, propertyName, callback){
 		for(var key in object){

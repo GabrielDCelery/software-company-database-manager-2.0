@@ -224,16 +224,16 @@ var CompaniesCtrl = angular.module('CompaniesCtrl', []);
 CompaniesCtrl.controller('CompaniesCtrl', [
 	'$scope', 
 	'$http',
-	'subMenu', 
-	'filteredSearch',
+	'SubMenu', 
+	'FilteredSearch',
 	'FormatData',
 	'Alerts',
 	'Database',
 	function (
 		$scope, 
 		$http,
-		subMenu, 
-		filteredSearch,
+		SubMenu, 
+		FilteredSearch,
 		FormatData,
 		Alerts,
 		Database
@@ -330,7 +330,7 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 ****************************************************************************/
 
 	function filterCompanyNames(input){
-		filteredSearch.filterCompanyNames(input, function(data){
+		FilteredSearch.filterCompanyNames(input, function(data){
 			$scope.filteredListOfCompanies = data;
 		})
 	};
@@ -341,7 +341,7 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 	};
 
 	function filterManagerNames(input){
-		filteredSearch.filterManagerNames(input, function(data){
+		FilteredSearch.filterManagerNames(input, function(data){
 			$scope.filteredListOfManagers = data;
 		})
 	};
@@ -439,7 +439,7 @@ MENU / FUNCTIONS
 ****************************************************************************/
 
 	function menu(property){
-		subMenu.displayContent($scope.display.form, property, function(data){
+		SubMenu.displayContent($scope.display.form, property, function(data){
 			$scope.display.form = data;
 		})
 	};
@@ -563,7 +563,7 @@ MailingFactory.factory('MailingFactory', ['$http', function ($http){
 }]);
 var SubMenuFactory = angular.module('SubMenuFactory', []);
 
-SubMenuFactory.factory('subMenu', [function (){
+SubMenuFactory.factory('SubMenu', [function (){
 
 	function displayContent(object, propertyName, callback){
 		for(var key in object){
@@ -584,7 +584,7 @@ SubMenuFactory.factory('subMenu', [function (){
 }]);
 var FilteredSearchFactory = angular.module('FilteredSearchFactory', []);
 
-FilteredSearchFactory.factory('filteredSearch', ['$http', function ($http){
+FilteredSearchFactory.factory('FilteredSearch', ['$http', function ($http){
 
 	var cachedCompanies;
 	var cachedManagers;

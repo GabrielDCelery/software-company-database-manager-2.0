@@ -1,6 +1,6 @@
 var FilteredSearchFactory = angular.module('FilteredSearchFactory', []);
 
-FilteredSearchFactory.factory('filteredSearch', ['$http', function ($http){
+FilteredSearchFactory.factory('FilteredSearch', ['$http', function ($http){
 
 	var cachedCompanies;
 	var cachedManagers;
