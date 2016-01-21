@@ -27,7 +27,13 @@ VARIABLES
 			showDetails: false,
 			extendContract: false,
 			addNewCompany: false
+		},
+
+		data: {
+			short: true,
+			detailed: true
 		}
+
 	}
 
 	/* FormData */
@@ -109,12 +115,36 @@ FORM / SEARCH / SEARCH COMPANIES SHORT LIST
 		
 		var data = $scope.form.searchCompany;
 
-		CompaniesFunctions.getCompanies(data, function(response){
+		CompaniesFunctions.getShortCompaniesData(data, function(response){
 			var dataObject = new CompaniesFunctions.DataFormatter(response);
 			dataObject.addColourCoding();
 			$scope.companiesShortList = dataObject.data;
 		})
 
+	}
+
+/****************************************************************************
+FORM / DETAILS / COMPANIES DETAILED
+****************************************************************************/
+
+	function formGetDetailedCompaniesData(){
+
+		if($scope.selectedCompanies.id.length == 0){
+
+			alert('Nem választottál ki semmit!');
+
+		} else {
+
+			var data = $scope.selectedCompanies;
+
+			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
+				var dataObject = new CompaniesFunctions.DataFormatter(response);
+				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
+				$scope.companiesDetailed = dataObject.data;
+				console.log($scope.companiesDetailed)
+			})
+
+		}
 	}
 
 /****************************************************************************
@@ -142,5 +172,6 @@ BINDING FUNCTIONS
 	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 	$scope.insertManagerNameToInputField = insertManagerNameToInputField;
 	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
+	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
 
 }]);

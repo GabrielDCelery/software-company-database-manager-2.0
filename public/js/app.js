@@ -246,7 +246,13 @@ VARIABLES
 			showDetails: false,
 			extendContract: false,
 			addNewCompany: false
+		},
+
+		data: {
+			short: true,
+			detailed: true
 		}
+
 	}
 
 	/* FormData */
@@ -328,12 +334,36 @@ FORM / SEARCH / SEARCH COMPANIES SHORT LIST
 		
 		var data = $scope.form.searchCompany;
 
-		CompaniesFunctions.getCompanies(data, function(response){
+		CompaniesFunctions.getShortCompaniesData(data, function(response){
 			var dataObject = new CompaniesFunctions.DataFormatter(response);
 			dataObject.addColourCoding();
 			$scope.companiesShortList = dataObject.data;
 		})
 
+	}
+
+/****************************************************************************
+FORM / DETAILS / COMPANIES DETAILED
+****************************************************************************/
+
+	function formGetDetailedCompaniesData(){
+
+		if($scope.selectedCompanies.id.length == 0){
+
+			alert('Nem választottál ki semmit!');
+
+		} else {
+
+			var data = $scope.selectedCompanies;
+
+			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
+				var dataObject = new CompaniesFunctions.DataFormatter(response);
+				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
+				$scope.companiesDetailed = dataObject.data;
+				console.log($scope.companiesDetailed)
+			})
+
+		}
 	}
 
 /****************************************************************************
@@ -361,16 +391,28 @@ BINDING FUNCTIONS
 	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 	$scope.insertManagerNameToInputField = insertManagerNameToInputField;
 	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
+	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
 
 }]);
 var CompaniesFactory = angular.module('CompaniesFactory', []);
 
 CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 
-	function getCompanies(data, callback){
+	function getShortCompaniesData(data, callback){
 		$http.post('php/companies/form_search_companies.php', data).success(function(data){
 			callback(data);
 		});
+	}
+
+	function getDetailedCompaniesData(data, callback){
+		$http.post('php/companies/form_companies_detailed.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+	function convertDate(stringDate){
+		var outputDate = new Date(stringDate);
+		return outputDate;
 	}
 
 	function DataFormatter(data){
@@ -390,6 +432,32 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		return this;
 	}
 
+	DataFormatter.prototype.formatDateCorrectly = function(){
+		this.data.map(function(obj){
+			if(obj.starting_date == "1970-01-01" || obj.starting_date == "0000-00-00" || obj.starting_date == null){
+				obj.starting_date = null;
+			} else {
+				obj.starting_date = convertDate(obj.starting_date);
+			}
+			if(obj.ending_date == "1970-01-01" || obj.ending_date == "0000-00-00" || obj.ending_date == null){
+				obj.ending_date = null;
+			} else {
+				obj.ending_date = convertDate(obj.ending_date);
+			}
+			if(obj.transfer_date == "1970-01-01" || obj.transfer_date == "0000-00-00" || obj.transfer_date == null){
+				obj.transfer_date = null;
+			} else {
+				obj.transfer_date = convertDate(obj.transfer_date);
+			}
+			if(obj.invoice_date == "1970-01-01" || obj.invoice_date == "0000-00-00" || obj.invoice_date == null){
+				obj.invoice_date = null;
+			} else {
+				obj.invoice_date = convertDate(obj.invoice_date);
+			}
+		})
+		return this;
+	}
+
 	DataFormatter.prototype.formatPostalServiceToString = function(){
 		this.data.map(function(obj){
 			if(obj.postal_service == 1){
@@ -404,7 +472,8 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 
 	return {
 		DataFormatter: DataFormatter,
-		getCompanies: getCompanies
+		getShortCompaniesData: getShortCompaniesData,
+		getDetailedCompaniesData: getDetailedCompaniesData
 	}
 
 
