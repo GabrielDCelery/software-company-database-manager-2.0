@@ -1,0 +1,114 @@
+
+<div class="btn-group btn-group-justified" role="group">
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-primary" ng-click="addNewCompany(form.addNewCompany)">MENTÉS ADATBÁZISBA</button>
+	</div>
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-primary" ng-click="">SZERZŐDÉS NYOMTATÁS</button>
+	</div>	
+</div>
+
+<table class="table table-bordered">
+	<tr>
+		<td>CÉG NEVE</td>
+		<td><input type="text" ng-model="form.addNewCompany.company_name" placeholder="CÉG NEVE"></td>
+		<td>CÉG CÍME</td>
+		<td><input type="text" ng-model="form.addNewCompany.company_address" placeholder="CÉG CÍME"></td>
+	</tr>
+	<tr>
+		<td>KEZDŐ DÁTUM</td>
+		<td><input type="date" ng-model="form.addNewCompany.starting_date" placeholder="KEZDŐ DÁTUM"></td>
+		<td>ZÁRÓ DÁTUM</td>
+		<td><input type="date" ng-model="form.addNewCompany.ending_date" placeholder="ZÁRÓ DÁTUM"></td>
+	</tr>
+	<tr>
+		<td>TELEFON</td>
+		<td><input type="text" ng-model="form.addNewCompany.company_phone" placeholder="TELEFON"></td>
+		<td>EMAIL</td>
+		<td><input type="text" ng-model="form.addNewCompany.company_email" placeholder="EMAIL"></td>
+	</tr>
+	<tr>
+		<td>SZÁMLA SZÁMA</td>
+		<td><input type="text" ng-model="form.addNewCompany.invoice_number" placeholder="SZÁMLA SZÁMA"></td>
+		<td>SZOLGÁLTATÓ</td>
+		<td>
+			<select ng-model="form.addNewCompany.service_provider">
+				<option selected>Zeller és Zeller Kft.</option>
+				<option>World Top Sport Bt.</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>SZOLGÁLTATÁS DÍJA (SZÁM)</td>
+		<td><input type="text" ng-model="form.addNewCompany.price_of_serv_num" placeholder="SZOLGÁLTATÁS DÍJA (SZÁM)"></td>
+		<td>SZOLGÁLTATÁS DÍJA (BETŰ)</td>
+		<td><input type="text" ng-model="form.addNewCompany.price_of_serv_let" placeholder="SZOLGÁLTATÁS DÍJA (BETŰ)"></td>
+	</tr>
+	<tr>
+		<td>FIZETÉS MÓDJA</td>
+		<td>
+			<select ng-model="form.addNewCompany.payment_method">
+				<option>készpénz</option>
+				<option>utalás</option>
+			</select>
+		</td>
+		<td>SZÁMLA DÁTUMA</td>
+		<td><input type="date" ng-model="form.addNewCompany.invoice_date" placeholder="SZÁMLA DÁTUMA"></td>
+	</tr>
+	<tr>
+		<td>UTALÁS DÁTUMA</td>
+		<td><input type="date" ng-model="form.addNewCompany.transfer_date" placeholder="UTALÁS DÁTUMA"></td>
+		<td>BANKSZÁMLASZÁM</td>
+		<td><input type="text" ng-model="form.addNewCompany.account_number" placeholder="BANKSZÁMLASZÁM"></td>
+	</tr>
+	<tr>
+		<td>CÉGJ. SZÁM</td>
+		<td><input type="text" ng-model="form.addNewCompany.company_register_id" placeholder="CÉGJ. SZÁM"></td>
+		<td>ADÓSZÁM</td>
+		<td><input type="text" ng-model="form.addNewCompany.company_tax_id" placeholder="ADÓSZÁM"></td>
+	</tr>
+	<tr>
+		<td>POSTAI MEGHAT. SZÁM</td>
+		<td><input type="text" ng-model="form.addNewCompany.postal_number" placeholder="POSTAI MEGHAT. SZÁM"></td>
+		<td>POSTAI SZOLG.</td>
+		<td>
+			<select ng-model="form.addNewCompany.postal_service">
+				<option>igen</option>
+				<option>nem</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>VEZETŐ NEVE</td>
+		<td><input type="text" ng-model="form.addNewCompany.manager_name" placeholder="VEZETŐ NEVE"></td>
+	</tr>
+	<tr>
+		<td>VEZETŐ STÁTUSZA</td>
+		<td>
+			<select ng-model="form.addNewCompany.manager_status">
+				<option>ügyvezető</option>
+				<option>meghatalmazott</option>
+			</select>
+		</td>
+		<td>IGAZOLVÁNY SZÁMA</td>
+		<td><input type="text" ng-model="form.addNewCompany.manager_id" placeholder="IGAZOLVÁNY SZÁMA"></td>
+	</tr>
+	<tr>
+		<td>VEZ. ANYJA NEVE</td>
+		<td><input type="text" ng-model="form.addNewCompany.manager_mother_name" placeholder="VEZ. ANYJA NEVE"></td>
+		<td>VEZETŐ CÍME</td>
+		<td><input type="text" ng-model="form.addNewCompany.manager_address" placeholder="VEZETŐ CÍME"></td>
+	</tr>
+	<tr>
+		<td>POSTAI NÉV</td>
+		<td><input type="text" ng-model="form.addNewCompany.postal_name" placeholder="POSTAI NÉV"></td>
+		<td>POSTACÍM</td>
+		<td><input type="text" ng-model="form.addNewCompany.postal_address" placeholder="POSTACÍM"></td>
+	</tr>
+	<tr>
+		<td>IRATŐRZŐ NEVE</td>
+		<td><input type="text" ng-model="form.addNewCompany.document_holder" placeholder="IRATŐRZŐ NEVE"></td>
+		<td>IRATŐRZÉSI CÍM</td>
+		<td><input type="text" ng-model="form.addNewCompany.document_holder_address" placeholder="IRATŐRZÉSI CÍM"></td>
+	</tr>
+</table>

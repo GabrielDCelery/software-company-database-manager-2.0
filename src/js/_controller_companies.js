@@ -52,6 +52,36 @@ VARIABLES
 			startingDate: null,
 			endingDate: null,
 			lastContractOnly: true
+		},
+
+		addNewCompany: {
+			company_name: "",
+			starting_date: new Date(),
+			ending_date: new Date(),
+			company_phone: "",
+			company_email: "",
+			invoice_number: "",
+			service_provider: "Zeller és Zeller Kft.",
+			transfer_date: new Date(),
+			invoice_date: new Date(),
+			payment_method: "",
+			account_number: "",
+			price_of_serv_num: 0,
+			price_of_serv_let: "",
+			company_address: "",
+			company_register_id: "",
+			company_tax_id: "",
+			postal_number: "",
+			postal_service: "nem",
+			postal_name: "",
+			postal_address: "",
+			manager_name: "",
+			manager_status: "ügyvezető",
+			manager_id: "",
+			manager_mother_name: "",
+			manager_address: "",
+			document_holder: "",
+			document_holder_address: "",
 		}
 
 	}
@@ -214,6 +244,18 @@ FORM / EXTEND
 	}
 
 /****************************************************************************
+FORM / ADDNEW
+****************************************************************************/	
+
+	function addNewCompany(data){
+		formatCompaniesDetailedDataForDatabase(data, function(data){
+			Database.addNewCompany(data, function(response){
+				Alerts.checkSuccess(response);
+			})
+		})
+	}
+
+/****************************************************************************
 MENU / FUNCTIONS
 ****************************************************************************/
 
@@ -243,5 +285,6 @@ BINDING FUNCTIONS
 	$scope.formChangeContractStatus = formChangeContractStatus;
 	$scope.formExtendContract = formExtendContract;
 	$scope.addExtendedContract = addExtendedContract;
+	$scope.addNewCompany = addNewCompany;
 
 }]);

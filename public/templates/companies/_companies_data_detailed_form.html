@@ -87,7 +87,7 @@
 		</td>
 		<td>
 			<div ng-hide="showForm">{{company.payment_method}}</div>
-			<select ng-model="companyDetailed.payment_method" ng-show="showForm">
+			<select ng-model="company.payment_method" ng-show="showForm">
 				<option>készpénz</option>
 				<option>utalás</option>
 			</select>
@@ -112,7 +112,7 @@
 			BANKSZÁMLASZÁM
 		</td>
 		<td>
-			<div ng-hide="showForm">{{account_number}}</div>
+			<div ng-hide="showForm">{{company.account_number}}</div>
 			<input type="text" ng-model="company.account_number" ng-show="showForm">
 		</td>
 	</tr>
@@ -157,7 +157,7 @@
 		</td>
 		<td>
 			<div ng-hide="showForm">{{company.manager_name}}</div>
-			<input type="text" ng-model="company.postal_number" ng-show="showForm">
+			<input type="text" ng-model="company.manager_name" ng-show="showForm">
 		</td>
 	</tr>
 	<tr>
@@ -166,7 +166,7 @@
 		</td>
 		<td>
 			<div ng-hide="showForm">{{company.manager_status}}</div>
-			<select ng-model="company.postal_service" ng-show="showForm">
+			<select ng-model="company.manager_status" ng-show="showForm">
 				<option>ügyvezető</option>
 				<option>meghatalmazott</option>
 			</select>

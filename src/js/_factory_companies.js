@@ -32,12 +32,19 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});
 	}
 
+	function addNewCompany(data, callback){
+		$http.post('php/companies/form_companies_add_new_company.php', data).success(function(data){
+			callback(data);
+		});	
+	}
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
 		overWriteCompanyData: overWriteCompanyData,
 		changeContractStatus: changeContractStatus,
-		extendContract: extendContract
+		extendContract: extendContract,
+		addNewCompany: addNewCompany
 	}
 
 
