@@ -2,12 +2,12 @@ var AlertsFactory = angular.module('AlertsFactory', []);
 
 AlertsFactory.factory('Alerts', [function (){
 
-	function isArrayEmpty(array, data, callback){
+	function isAnythingSelected(array, callback){
 
 		if(array.length == 0){
 			alert('Nem választottál ki semmit!');
 		} else {
-			callback(data);
+			callback(array);
 		}
 
 	}
@@ -21,7 +21,7 @@ AlertsFactory.factory('Alerts', [function (){
 	}
 
 	return {
-		isArrayEmpty: isArrayEmpty,
+		isAnythingSelected: isAnythingSelected,
 		checkSuccess: checkSuccess
 	}
 

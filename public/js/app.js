@@ -356,7 +356,7 @@ FORM / DETAILS
 
 	function formGetDetailedCompaniesData(){
 
-		Alerts.isArrayEmpty($scope.selectedCompanies.id, $scope.selectedCompanies.id, function(data){
+		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
 			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
 				var dataObject = new FormatData.DataObject(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
@@ -667,12 +667,12 @@ var AlertsFactory = angular.module('AlertsFactory', []);
 
 AlertsFactory.factory('Alerts', [function (){
 
-	function isArrayEmpty(array, data, callback){
+	function isAnythingSelected(array, callback){
 
 		if(array.length == 0){
 			alert('Nem választottál ki semmit!');
 		} else {
-			callback(data);
+			callback(array);
 		}
 
 	}
@@ -686,7 +686,7 @@ AlertsFactory.factory('Alerts', [function (){
 	}
 
 	return {
-		isArrayEmpty: isArrayEmpty,
+		isAnythingSelected: isAnythingSelected,
 		checkSuccess: checkSuccess
 	}
 
