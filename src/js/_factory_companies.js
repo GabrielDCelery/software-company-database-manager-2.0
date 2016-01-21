@@ -20,10 +20,17 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		});
 	}
 
+	function changeContractStatus(data, callback){
+		$http.post('php/companies/form_companies_change_contract_status.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
-		overWriteCompanyData: overWriteCompanyData
+		overWriteCompanyData: overWriteCompanyData,
+		changeContractStatus: changeContractStatus
 	}
 
 

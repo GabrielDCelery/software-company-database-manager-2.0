@@ -333,14 +333,12 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 FORM / SEARCH
 ****************************************************************************/
 
-	function formSearchCompaniesShortList(){
+	function formSearchCompaniesShortList(searchParams){
 
 		$scope.filteredListOfCompanies = [];
 		$scope.filteredListOfManagers = [];
 		
-		var data = $scope.form.searchCompany;
-
-		CompaniesFunctions.getShortCompaniesData(data, function(response){
+		CompaniesFunctions.getShortCompaniesData(searchParams, function(response){
 			var dataObject = new FormatData.DataObject(response);
 			dataObject.addColourCoding();
 			$scope.companiesShortList = dataObject.data;
@@ -391,10 +389,18 @@ FORM / EXTEND
 
 	function formChangeContractStatus(){
 		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
-			console.log('extend contract...')
+			Alerts.confirmChange(data, function(data){
+				CompaniesFunctions.changeContractStatus(data, function(response){
+					Alerts.checkSuccess(response);
+					if(!($scope.form.searchCompany.validContract && $scope.form.searchCompany.expiredContract)){
+						$scope.form.searchCompany.validContract = !$scope.form.searchCompany.validContract;
+						$scope.form.searchCompany.expiredContract = !$scope.form.searchCompany.expiredContract;
+					}
+					formSearchCompaniesShortList($scope.form.searchCompany);
+				})
+			})
 		})
 	}
-
 
 /****************************************************************************
 MENU / FUNCTIONS
@@ -448,10 +454,17 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		});
 	}
 
+	function changeContractStatus(data, callback){
+		$http.post('php/companies/form_companies_change_contract_status.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
-		overWriteCompanyData: overWriteCompanyData
+		overWriteCompanyData: overWriteCompanyData,
+		changeContractStatus: changeContractStatus
 	}
 
 
@@ -691,9 +704,17 @@ AlertsFactory.factory('Alerts', [function (){
 		}
 	}
 
+	function confirmChange(data, callback){
+		var confirmAlert = confirm('Végre akarod hajtani a kívánt változtatásokat?');
+		if(confirmAlert){
+			callback(data);
+		}
+	}
+
 	return {
 		isAnythingSelected: isAnythingSelected,
-		checkSuccess: checkSuccess
+		checkSuccess: checkSuccess,
+		confirmChange: confirmChange
 	}
 
 

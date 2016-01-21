@@ -112,14 +112,12 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 FORM / SEARCH
 ****************************************************************************/
 
-	function formSearchCompaniesShortList(){
+	function formSearchCompaniesShortList(searchParams){
 
 		$scope.filteredListOfCompanies = [];
 		$scope.filteredListOfManagers = [];
 		
-		var data = $scope.form.searchCompany;
-
-		CompaniesFunctions.getShortCompaniesData(data, function(response){
+		CompaniesFunctions.getShortCompaniesData(searchParams, function(response){
 			var dataObject = new FormatData.DataObject(response);
 			dataObject.addColourCoding();
 			$scope.companiesShortList = dataObject.data;
@@ -170,10 +168,18 @@ FORM / EXTEND
 
 	function formChangeContractStatus(){
 		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
-			console.log('extend contract...')
+			Alerts.confirmChange(data, function(data){
+				CompaniesFunctions.changeContractStatus(data, function(response){
+					Alerts.checkSuccess(response);
+					if(!($scope.form.searchCompany.validContract && $scope.form.searchCompany.expiredContract)){
+						$scope.form.searchCompany.validContract = !$scope.form.searchCompany.validContract;
+						$scope.form.searchCompany.expiredContract = !$scope.form.searchCompany.expiredContract;
+					}
+					formSearchCompaniesShortList($scope.form.searchCompany);
+				})
+			})
 		})
 	}
-
 
 /****************************************************************************
 MENU / FUNCTIONS

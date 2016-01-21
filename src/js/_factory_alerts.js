@@ -20,9 +20,17 @@ AlertsFactory.factory('Alerts', [function (){
 		}
 	}
 
+	function confirmChange(data, callback){
+		var confirmAlert = confirm('Végre akarod hajtani a kívánt változtatásokat?');
+		if(confirmAlert){
+			callback(data);
+		}
+	}
+
 	return {
 		isAnythingSelected: isAnythingSelected,
-		checkSuccess: checkSuccess
+		checkSuccess: checkSuccess,
+		confirmChange: confirmChange
 	}
 
 
