@@ -11,7 +11,8 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'MailingFactory',
 	'SubMenuFactory',
 	'FilteredSearchFactory',
-	'FormatDataFactory'
+	'FormatDataFactory',
+	'AlertsFactory'
 ]);
 
 DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
@@ -226,6 +227,7 @@ CompaniesCtrl.controller('CompaniesCtrl', [
 	'subMenu', 
 	'filteredSearch',
 	'FormatData',
+	'Alerts',
 	'CompaniesFunctions',
 	function (
 		$scope, 
@@ -233,6 +235,7 @@ CompaniesCtrl.controller('CompaniesCtrl', [
 		subMenu, 
 		filteredSearch,
 		FormatData,
+		Alerts,
 		CompaniesFunctions
 	){
 
@@ -353,21 +356,13 @@ FORM / DETAILS
 
 	function formGetDetailedCompaniesData(){
 
-		if($scope.selectedCompanies.id.length == 0){
-
-			alert('Nem választottál ki semmit!');
-
-		} else {
-
-			var data = $scope.selectedCompanies;
-
+		Alerts.isArrayEmpty($scope.selectedCompanies.id, $scope.selectedCompanies, function(data){
 			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
 				var dataObject = new FormatData.DataObject(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
 				$scope.companiesDetailed = dataObject.data;
 			})
-
-		}
+		})	
 	}
 
 	/* Overwrite detailed company information */
@@ -382,12 +377,19 @@ FORM / DETAILS
 
 		CompaniesFunctions.overWriteCompanyData(dataObject.data, function(response){
 
-			alert('Adatok sikeresen felülírva!');
-			formGetDetailedCompaniesData()
+			Alerts.checkSuccess(response);
+			formGetDetailedCompaniesData();
 
 		})
 	
 	}
+
+
+/****************************************************************************
+FORM / EXTEND
+****************************************************************************/
+
+
 
 /****************************************************************************
 MENU / FUNCTIONS
@@ -657,6 +659,35 @@ FormatDataFactory.factory('FormatData', [function (){
 
 	return {
 		DataObject: DataObject
+	}
+
+
+}]);
+var AlertsFactory = angular.module('AlertsFactory', []);
+
+AlertsFactory.factory('Alerts', [function (){
+
+	function isArrayEmpty(array, data, callback){
+
+		if(array.length == 0){
+			alert('Nem választottál ki semmit!');
+		} else {
+			callback(data);
+		}
+
+	}
+
+	function checkSuccess(response){
+		if(response == true){
+			alert('Változások sikeresen végrehajtva!');
+		} else {
+			alert('Nem sikerült a kért változatásokat végrehajtani!');
+		}
+	}
+
+	return {
+		isArrayEmpty: isArrayEmpty,
+		checkSuccess: checkSuccess
 	}
 
 

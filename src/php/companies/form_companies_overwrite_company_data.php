@@ -49,6 +49,6 @@ for($i = 0; $i < count($dataobject); $i++){
 
 }
 
-echo('success...');
+echo true;
 
 ?>
