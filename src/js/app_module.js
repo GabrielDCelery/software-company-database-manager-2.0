@@ -6,7 +6,7 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'AuthCtrl',
 	'AuthFactory',
 	'CompaniesCtrl',
-	'CompaniesFactory',
+	'DatabaseFactory',
 	'MailingCtrl',
 	'MailingFactory',
 	'SubMenuFactory',

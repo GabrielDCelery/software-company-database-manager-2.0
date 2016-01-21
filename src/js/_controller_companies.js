@@ -7,7 +7,7 @@ CompaniesCtrl.controller('CompaniesCtrl', [
 	'filteredSearch',
 	'FormatData',
 	'Alerts',
-	'CompaniesFunctions',
+	'Database',
 	function (
 		$scope, 
 		$http,
@@ -15,7 +15,7 @@ CompaniesCtrl.controller('CompaniesCtrl', [
 		filteredSearch,
 		FormatData,
 		Alerts,
-		CompaniesFunctions
+		Database
 	){
 
 /****************************************************************************
@@ -88,7 +88,7 @@ ENCAPSULATED FUNCTIONS
 
 	function getDetailedFormattedCompaniesData(callback){
 		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
-			CompaniesFunctions.getDetailedCompaniesData(data, function(response){
+			Database.getDetailedCompaniesData(data, function(response){
 				var dataObject = new FormatData.DataObject(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
 				callback(dataObject.data);
@@ -140,7 +140,7 @@ FORM / SEARCH
 		$scope.filteredListOfCompanies = [];
 		$scope.filteredListOfManagers = [];
 		
-		CompaniesFunctions.getShortCompaniesData(searchParams, function(response){
+		Database.getShortCompaniesData(searchParams, function(response){
 			var dataObject = new FormatData.DataObject(response);
 			dataObject.addColourCoding();
 			$scope.companiesShortList = dataObject.data;
@@ -168,7 +168,7 @@ FORM / DETAILS
 
 		formatCompaniesDetailedDataForDatabase(data, function(data){
 
-			CompaniesFunctions.overWriteCompanyData(data, function(response){
+			Database.overWriteCompanyData(data, function(response){
 
 				Alerts.checkSuccess(response);
 				formGetDetailedCompaniesData();
@@ -186,7 +186,7 @@ FORM / EXTEND
 	function formChangeContractStatus(){
 		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
 			Alerts.confirmChange(data, function(data){
-				CompaniesFunctions.changeContractStatus(data, function(response){
+				Database.changeContractStatus(data, function(response){
 					Alerts.checkSuccess(response);
 					if(!($scope.form.searchCompany.validContract && $scope.form.searchCompany.expiredContract)){
 						$scope.form.searchCompany.validContract = !$scope.form.searchCompany.validContract;
@@ -207,7 +207,7 @@ FORM / EXTEND
 
 	function addExtendedContract(data){
 		formatCompaniesDetailedDataForDatabase(data, function(data){
-			CompaniesFunctions.extendContract(data, function(response){
+			Database.extendContract(data, function(response){
 				Alerts.checkSuccess(response);
 			})
 		})

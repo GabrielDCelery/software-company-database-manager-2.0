@@ -1,6 +1,6 @@
-var CompaniesFactory = angular.module('CompaniesFactory', []);
+var DatabaseFactory = angular.module('DatabaseFactory', []);
 
-CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
+DatabaseFactory.factory('Database', ['$http', function ($http){
 
 	function getShortCompaniesData(data, callback){
 		$http.post('php/companies/form_search_companies.php', data).success(function(data){
