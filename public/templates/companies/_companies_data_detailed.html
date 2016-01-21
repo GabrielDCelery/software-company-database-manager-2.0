@@ -5,19 +5,19 @@
 			<button type="button" class="btn btn-primary" ng-click="showForm = !showForm">SZERKESZT</button>
 		</div>
 		<div class="btn-group" role="group">
-			<button type="button" class="btn btn-primary">MÓDOSÍTÁSOK MENTÉSE</button>
+			<button type="button" class="btn btn-primary" ng-click="overwriteCompanyData(company)">MÓDOSÍTÁSOK MENTÉSE</button>
 		</div>
 		<div class="btn-group" role="group">
-			<button type="button" class="btn btn-primary">VISSZAVONÁS</button>
+			<button type="button" class="btn btn-primary" ng-click="resetCompanyDetailedForm()">VISSZAVONÁS</button>
 		</div>
 		<div class="btn-group" role="group">
-			<button type="button" class="btn btn-primary">BORÍTÓ NYOMTATÁS</button>
+			<button type="button" class="btn btn-primary" ng-click="newDocumentCover(company)">BORÍTÓ NYOMTATÁS</button>
 		</div>
 		<div class="btn-group" role="group">
-			<button type="button" class="btn btn-primary">SZERZŐDÉS NYOMTATÁS</button>
+			<button type="button" class="btn btn-primary" ng-click="newDocumentContract(company)">SZERZŐDÉS NYOMTATÁS</button>
 		</div>	
 	</div>
-	
+
 	<table class="table table-bordered">
 		<tr>
 			<td ng-class="{green:'success', yellow:'warning', red:'danger'}[company.css_color]">

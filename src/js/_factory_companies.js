@@ -14,6 +14,12 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		});
 	}
 
+	function overWriteCompanyData(data, callback){
+		$http.post('php/companies/form_companies_overwrite_company_data.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
 	function convertDate(stringDate){
 		var outputDate = new Date(stringDate);
 		return outputDate;
@@ -73,11 +79,22 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		return this;
 	}
 
+	DataFormatter.prototype.formatPostalServiceToBoolean = function(){
+		this.data.map(function(obj){
+			if(obj.postal_service == 'igen'){
+				obj.postal_service = 1;
+			} else {
+				obj.postal_service = 0;
+			}
+		})
+		return this;
+	}
 
 	return {
 		DataFormatter: DataFormatter,
 		getShortCompaniesData: getShortCompaniesData,
-		getDetailedCompaniesData: getDetailedCompaniesData
+		getDetailedCompaniesData: getDetailedCompaniesData,
+		overWriteCompanyData: overWriteCompanyData
 	}
 
 

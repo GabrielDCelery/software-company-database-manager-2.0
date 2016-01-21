@@ -324,7 +324,7 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 
 
 /****************************************************************************
-FORM / SEARCH / SEARCH COMPANIES SHORT LIST
+FORM / SEARCH
 ****************************************************************************/
 
 	function formSearchCompaniesShortList(){
@@ -343,8 +343,10 @@ FORM / SEARCH / SEARCH COMPANIES SHORT LIST
 	}
 
 /****************************************************************************
-FORM / DETAILS / COMPANIES DETAILED
+FORM / DETAILS
 ****************************************************************************/
+
+	/* Get detailed companies data */
 
 	function formGetDetailedCompaniesData(){
 
@@ -360,10 +362,28 @@ FORM / DETAILS / COMPANIES DETAILED
 				var dataObject = new CompaniesFunctions.DataFormatter(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
 				$scope.companiesDetailed = dataObject.data;
-				console.log($scope.companiesDetailed)
 			})
 
 		}
+	}
+
+	/* Overwrite detailed company information */
+
+	function overwriteCompanyData(data){
+
+		var array = [];
+		array.push(data);
+
+		var dataObject = new CompaniesFunctions.DataFormatter(array);
+		dataObject.formatPostalServiceToBoolean();
+
+		CompaniesFunctions.overWriteCompanyData(dataObject.data, function(response){
+
+			alert('Adatok sikeresen felülírva!');
+			formGetDetailedCompaniesData()
+
+		})
+	
 	}
 
 /****************************************************************************
@@ -392,6 +412,7 @@ BINDING FUNCTIONS
 	$scope.insertManagerNameToInputField = insertManagerNameToInputField;
 	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
 	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
+	$scope.overwriteCompanyData = overwriteCompanyData;
 
 }]);
 var CompaniesFactory = angular.module('CompaniesFactory', []);
@@ -406,6 +427,12 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 
 	function getDetailedCompaniesData(data, callback){
 		$http.post('php/companies/form_companies_detailed.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+	function overWriteCompanyData(data, callback){
+		$http.post('php/companies/form_companies_overwrite_company_data.php', data).success(function(data){
 			callback(data);
 		});
 	}
@@ -469,11 +496,22 @@ CompaniesFactory.factory('CompaniesFunctions', ['$http', function ($http){
 		return this;
 	}
 
+	DataFormatter.prototype.formatPostalServiceToBoolean = function(){
+		this.data.map(function(obj){
+			if(obj.postal_service == 'igen'){
+				obj.postal_service = 1;
+			} else {
+				obj.postal_service = 0;
+			}
+		})
+		return this;
+	}
 
 	return {
 		DataFormatter: DataFormatter,
 		getShortCompaniesData: getShortCompaniesData,
-		getDetailedCompaniesData: getDetailedCompaniesData
+		getDetailedCompaniesData: getDetailedCompaniesData,
+		overWriteCompanyData: overWriteCompanyData
 	}
 
 

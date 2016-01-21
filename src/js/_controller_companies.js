@@ -105,7 +105,7 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 
 
 /****************************************************************************
-FORM / SEARCH / SEARCH COMPANIES SHORT LIST
+FORM / SEARCH
 ****************************************************************************/
 
 	function formSearchCompaniesShortList(){
@@ -124,8 +124,10 @@ FORM / SEARCH / SEARCH COMPANIES SHORT LIST
 	}
 
 /****************************************************************************
-FORM / DETAILS / COMPANIES DETAILED
+FORM / DETAILS
 ****************************************************************************/
+
+	/* Get detailed companies data */
 
 	function formGetDetailedCompaniesData(){
 
@@ -141,10 +143,28 @@ FORM / DETAILS / COMPANIES DETAILED
 				var dataObject = new CompaniesFunctions.DataFormatter(response);
 				dataObject.addColourCoding().formatPostalServiceToString().formatDateCorrectly();
 				$scope.companiesDetailed = dataObject.data;
-				console.log($scope.companiesDetailed)
 			})
 
 		}
+	}
+
+	/* Overwrite detailed company information */
+
+	function overwriteCompanyData(data){
+
+		var array = [];
+		array.push(data);
+
+		var dataObject = new CompaniesFunctions.DataFormatter(array);
+		dataObject.formatPostalServiceToBoolean();
+
+		CompaniesFunctions.overWriteCompanyData(dataObject.data, function(response){
+
+			alert('Adatok sikeresen felülírva!');
+			formGetDetailedCompaniesData()
+
+		})
+	
 	}
 
 /****************************************************************************
@@ -173,5 +193,6 @@ BINDING FUNCTIONS
 	$scope.insertManagerNameToInputField = insertManagerNameToInputField;
 	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
 	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
+	$scope.overwriteCompanyData = overwriteCompanyData;
 
 }]);
