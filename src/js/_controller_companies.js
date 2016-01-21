@@ -168,6 +168,11 @@ FORM / DETAILS
 FORM / EXTEND
 ****************************************************************************/
 
+	function formChangeContractStatus(){
+		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
+			console.log('extend contract...')
+		})
+	}
 
 
 /****************************************************************************
@@ -197,5 +202,6 @@ BINDING FUNCTIONS
 	$scope.formSearchCompaniesShortList = formSearchCompaniesShortList;
 	$scope.formGetDetailedCompaniesData = formGetDetailedCompaniesData;
 	$scope.overwriteCompanyData = overwriteCompanyData;
+	$scope.formChangeContractStatus =formChangeContractStatus;
 
 }]);
