@@ -115,9 +115,11 @@ VARIABLES
 
 	/* Master objects */
 
-	var display = angular.copy($scope.display);
+	$scope.displayMaster = angular.copy($scope.display);
+	$scope.selectedCompaniesMaster = angular.copy($scope.selectedCompanies);
 	$scope.companyDataEditMaster = [];
 	$scope.companyDataExtendMaster = [];
+	$scope.companyDataListMaster = [];
 
 /****************************************************************************
 ENCAPSULATED FUNCTIONS
@@ -325,7 +327,11 @@ MENU / FUNCTIONS
 	};
 
 	function reset(){
-		$scope.display = angular.copy(display);
+		$scope.display = angular.copy($scope.displayMaster);
+		$scope.selectedCompanies = angular.copy($scope.displayMaster);
+		$scope.companyDataList = angular.copy($scope.companyDataListMaster);
+		$scope.companyDataEdit = angular.copy($scope.companyDataEditMaster);
+		$scope.companyDataExtend = angular.copy($scope.companyDataExtendMaster);
 	};
 
 /****************************************************************************
