@@ -708,12 +708,14 @@ MailingCtrl.controller('MailingCtrl', [
 	'FilteredSearch',
 	'Database',
 	'FormatData',
+	'Alerts',
 	function (
 		$scope, 
 		subMenu,
 		FilteredSearch,
 		Database,
-		FormatData
+		FormatData,
+		Alerts
 	){
 
 /****************************************************************************
@@ -791,9 +793,27 @@ FORM / SEARCH
 		})
 	}
 
+/****************************************************************************
+FORM / EDIT
+****************************************************************************/
+
+	function editMails(){
+		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
+			for(var i = 0; i < $scope.mailDataList.length; i++){
+				$scope.mailDataList[i].show_input = false;
+			}
+			for(var i = 0; i < $scope.selectedMails.id.length; i++){
+				for(var j = 0; j < $scope.mailDataList.length; j++){
+					if($scope.selectedMails.id[i] == $scope.mailDataList[j].mail_id){
+						$scope.mailDataList[j].show_input = true;
+					}
+				}
+			}
+		})
+	}
 
 /****************************************************************************
-FUNCTIONS
+MENU FUNCTIONS
 ****************************************************************************/
 
 	function menu(property){
@@ -837,6 +857,8 @@ BINDING FUNCTIONS
 	$scope.formGetMailDataList = formGetMailDataList;
 	$scope.checkAll = checkAll;
 	$scope.checkAllMails = checkAll;
+
+	$scope.editMails = editMails;
 
 }]);
 var MailingFactory = angular.module('MailingFactory', []);
