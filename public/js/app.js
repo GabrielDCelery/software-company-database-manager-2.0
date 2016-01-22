@@ -315,14 +315,14 @@ VARIABLES
 
 	/* Short list of companies */
 
-	$scope.companiesShortList = [];
+	$scope.companyDataList = [];
 	$scope.sortField = 'company_name';
 	$scope.reverseSortField = false;
 
 	/* Detailed companies info */
 
 	$scope.companyDataEdit = [];
-	$scope.companiesDetailedExtend = [];
+	$scope.companyDataExtend = [];
 
 	/* Object holding the information of checkboxes */
 	$scope.selectedCompanies = {
@@ -333,6 +333,8 @@ VARIABLES
 	/* Master objects */
 
 	var display = angular.copy($scope.display);
+	$scope.companyDataEditMaster = [];
+	$scope.companyDataExtendMaster = [];
 
 /****************************************************************************
 ENCAPSULATED FUNCTIONS
@@ -427,13 +429,13 @@ FORM / SEARCH
 		Database.getShortCompaniesData(searchParams, function(response){
 			var dataObject = new FormatData.DataObject(response);
 			dataObject.addColourCoding();
-			$scope.companiesShortList = dataObject.data;
+			$scope.companyDataList = dataObject.data;
 			displayCompanyDataList();
 		})
 	}
 
 /****************************************************************************
-FORM / DETAILS
+FORM / EDIT
 ****************************************************************************/
 
 	/* Get detailed companies data */
@@ -441,6 +443,7 @@ FORM / DETAILS
 	function formGetCompanyDataEdit(){
 		getDetailedFormattedCompanyData(function(data){
 			$scope.companyDataEdit = data;
+			$scope.companyDataEditMaster = angular.copy($scope.companyDataEdit);
 			displayCompanyDataEdit();
 		})
 	}
@@ -454,6 +457,10 @@ FORM / DETAILS
 				formGetCompanyDataEdit();
 			})
 		})	
+	}
+
+	function resetFormCompanyDataEdit(){
+		$scope.companyDataEdit = angular.copy($scope.companyDataEditMaster);
 	}
 
 /****************************************************************************
@@ -477,7 +484,8 @@ FORM / EXTEND
 
 	function formGetCompanyDataExtend(){
 		getDetailedFormattedCompanyData(function(data){
-			$scope.companiesDetailedExtend = data;
+			$scope.companyDataExtend = data;
+			$scope.companyDataExtendMaster = angular.copy($scope.companyDataExtend);
 			displayCompanyDataExtend();
 		})
 	}
@@ -486,8 +494,13 @@ FORM / EXTEND
 		formatCompanyDetailedDataForDatabase(data, function(data){
 			Database.extendContract(data, function(response){
 				Alerts.checkSuccess(response);
+				formGetCompanyDataList($scope.form.searchCompany);
 			})
 		})
+	}
+
+	function resetFormCompanyDataExtend(){
+		$scope.companyDataExtend = angular.copy($scope.companyDataExtendMaster);
 	}
 
 /****************************************************************************
@@ -534,6 +547,8 @@ BINDING FUNCTIONS
 	$scope.addExtendedContract = addExtendedContract;
 	$scope.addNewCompany = addNewCompany;
 	$scope.displayCompanyDataList = displayCompanyDataList;
+	$scope.resetFormCompanyDataEdit = resetFormCompanyDataEdit;
+	$scope.resetFormCompanyDataExtend = resetFormCompanyDataExtend;
 
 }]);
 var DatabaseFactory = angular.module('DatabaseFactory', []);

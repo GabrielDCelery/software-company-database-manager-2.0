@@ -8,7 +8,7 @@
 		<td ng-click="sortField = 'starting_date'; reverseSortField = !reverseSortField">KEZDŐ DÁTUM</td>
 		<td ng-click="sortField = 'ending_date'; reverseSortField = !reverseSortField">ZÁRÓ DÁTUM</td>
 	</tr>
-	<tr ng-repeat="company in companiesShortList | orderBy:sortField:reverseSortField" ng-class="{green:'success', yellow:'warning', red:'danger'}[company.css_color]">
+	<tr ng-repeat="company in companyDataList | orderBy:sortField:reverseSortField" ng-class="{green:'success', yellow:'warning', red:'danger'}[company.css_color]">
 		<td><input type="checkbox" checklist-model="selectedCompanies.id" checklist-value="company.id"></td>
 		<td>{{company.company_name}}</td>
 		<td>{{company.company_email}}</td>
