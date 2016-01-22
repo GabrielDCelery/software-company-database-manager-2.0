@@ -14,9 +14,9 @@ AlertsFactory.factory('Alerts', [function (){
 
 	function checkSuccess(response){
 		if(response == true){
-			alert('Változások sikeresen végrehajtva!');
+			alert('A feladat sikeresen végrehajtva!');
 		} else {
-			alert('Nem sikerült a kért változatásokat végrehajtani!');
+			alert('Nem sikerült a kért műveletet elvégezni!');
 		}
 	}
 

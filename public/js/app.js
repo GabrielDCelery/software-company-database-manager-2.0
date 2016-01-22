@@ -330,9 +330,16 @@ VARIABLES
 	$scope.companyDataExtend = [];
 
 	/* Object holding the information of checkboxes */
+
 	$scope.selectedCompanies = {
 		id: [],
 		allChecked: false
+	}
+
+	/* Email sender */
+
+	$scope.emailToCompanies = {
+		subject: 'A szerződés lejárt'
 	}
 
 	/* Master objects */
@@ -438,6 +445,33 @@ FORM / SEARCH
 			dataObject.addColourCoding();
 			$scope.companyDataList = dataObject.data;
 			displayCompanyDataList();
+		})
+	}
+
+/****************************************************************************
+FORM /EMAIL
+****************************************************************************/
+
+	function mailToSelectedCompanies(){
+
+		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
+			$scope.selectedCompanies.id = data;
+			switch ($scope.emailToCompanies.subject){
+				case ('A szerződés lejárt'):
+				$scope.selectedCompanies.type = "contractexpired";
+				$scope.selectedCompanies.subject = 'A szerződés lejárt';
+				break;
+
+				case('Utolsó figyelmeztetés'):
+				$scope.selectedCompanies.type = "lastwarning";
+				$scope.selectedCompanies.subject = 'Utolsó figyelmeztetés';
+				break;
+			}
+
+			Database.mailToSelectedCompanies($scope.selectedCompanies, function(response){
+				Alerts.checkSuccess(response);
+			})
+
 		})
 	}
 
@@ -578,6 +612,7 @@ BINDING FUNCTIONS
 	$scope.resetFormCompanyDataExtend = resetFormCompanyDataExtend;
 	$scope.docCreateCover = docCreateCover;
 	$scope.docCreateContract = docCreateContract;
+	$scope.mailToSelectedCompanies = mailToSelectedCompanies;
 
 }]);
 var DatabaseFactory = angular.module('DatabaseFactory', []);
@@ -620,13 +655,20 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});	
 	}
 
+	function mailToSelectedCompanies(data, callback){
+		$http.post('php/companies/form_companies_mail_to_companies.php', data).success(function(data){
+			callback(data);
+		});		
+	}
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
 		overWriteCompanyData: overWriteCompanyData,
 		changeContractStatus: changeContractStatus,
 		extendContract: extendContract,
-		addNewCompany: addNewCompany
+		addNewCompany: addNewCompany,
+		mailToSelectedCompanies: mailToSelectedCompanies
 	}
 
 
@@ -860,9 +902,9 @@ AlertsFactory.factory('Alerts', [function (){
 
 	function checkSuccess(response){
 		if(response == true){
-			alert('Változások sikeresen végrehajtva!');
+			alert('A feladat sikeresen végrehajtva!');
 		} else {
-			alert('Nem sikerült a kért változatásokat végrehajtani!');
+			alert('Nem sikerült a kért műveletet elvégezni!');
 		}
 	}
 

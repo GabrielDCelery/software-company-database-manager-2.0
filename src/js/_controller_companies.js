@@ -108,9 +108,16 @@ VARIABLES
 	$scope.companyDataExtend = [];
 
 	/* Object holding the information of checkboxes */
+
 	$scope.selectedCompanies = {
 		id: [],
 		allChecked: false
+	}
+
+	/* Email sender */
+
+	$scope.emailToCompanies = {
+		subject: 'A szerződés lejárt'
 	}
 
 	/* Master objects */
@@ -216,6 +223,33 @@ FORM / SEARCH
 			dataObject.addColourCoding();
 			$scope.companyDataList = dataObject.data;
 			displayCompanyDataList();
+		})
+	}
+
+/****************************************************************************
+FORM /EMAIL
+****************************************************************************/
+
+	function mailToSelectedCompanies(){
+
+		Alerts.isAnythingSelected($scope.selectedCompanies.id, function(data){
+			$scope.selectedCompanies.id = data;
+			switch ($scope.emailToCompanies.subject){
+				case ('A szerződés lejárt'):
+				$scope.selectedCompanies.type = "contractexpired";
+				$scope.selectedCompanies.subject = 'A szerződés lejárt';
+				break;
+
+				case('Utolsó figyelmeztetés'):
+				$scope.selectedCompanies.type = "lastwarning";
+				$scope.selectedCompanies.subject = 'Utolsó figyelmeztetés';
+				break;
+			}
+
+			Database.mailToSelectedCompanies($scope.selectedCompanies, function(response){
+				Alerts.checkSuccess(response);
+			})
+
 		})
 	}
 
@@ -356,5 +390,6 @@ BINDING FUNCTIONS
 	$scope.resetFormCompanyDataExtend = resetFormCompanyDataExtend;
 	$scope.docCreateCover = docCreateCover;
 	$scope.docCreateContract = docCreateContract;
+	$scope.mailToSelectedCompanies = mailToSelectedCompanies;
 
 }]);

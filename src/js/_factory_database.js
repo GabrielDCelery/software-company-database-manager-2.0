@@ -38,13 +38,20 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});	
 	}
 
+	function mailToSelectedCompanies(data, callback){
+		$http.post('php/companies/form_companies_mail_to_companies.php', data).success(function(data){
+			callback(data);
+		});		
+	}
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
 		overWriteCompanyData: overWriteCompanyData,
 		changeContractStatus: changeContractStatus,
 		extendContract: extendContract,
-		addNewCompany: addNewCompany
+		addNewCompany: addNewCompany,
+		mailToSelectedCompanies: mailToSelectedCompanies
 	}
 
 
