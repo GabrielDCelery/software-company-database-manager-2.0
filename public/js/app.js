@@ -572,6 +572,23 @@ DOCUMENT FUNCTIONS
 		})
 	}
 
+
+/***********************************************************************************
+CHECKLIST FUNCTIONS
+***********************************************************************************/
+
+	function checkAll (){
+		if ($scope.selectedCompanies.allChecked == false){
+			angular.forEach($scope.companyDataList, function(item){
+				$scope.selectedCompanies.id.push(item.id)
+			})
+			$scope.selectedCompanies.allChecked = true;
+		} else {
+			$scope.selectedCompanies.id = [];
+			$scope.selectedCompanies.allChecked = false;
+		}
+	}
+
 /****************************************************************************
 MENU / FUNCTIONS
 ****************************************************************************/
@@ -613,6 +630,7 @@ BINDING FUNCTIONS
 	$scope.docCreateCover = docCreateCover;
 	$scope.docCreateContract = docCreateContract;
 	$scope.mailToSelectedCompanies = mailToSelectedCompanies;
+	$scope.checkAll	= checkAll;
 
 }]);
 var DatabaseFactory = angular.module('DatabaseFactory', []);
