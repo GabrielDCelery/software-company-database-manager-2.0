@@ -408,6 +408,6 @@ BINDING FUNCTIONS
 	$scope.docCreateCover = docCreateCover;
 	$scope.docCreateContract = docCreateContract;
 	$scope.mailToSelectedCompanies = mailToSelectedCompanies;
-	$scope.checkAll	= checkAll;
+	$scope.checkAllCompanies = checkAll;
 
 }]);

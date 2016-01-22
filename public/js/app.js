@@ -630,7 +630,7 @@ BINDING FUNCTIONS
 	$scope.docCreateCover = docCreateCover;
 	$scope.docCreateContract = docCreateContract;
 	$scope.mailToSelectedCompanies = mailToSelectedCompanies;
-	$scope.checkAll	= checkAll;
+	$scope.checkAllCompanies = checkAll;
 
 }]);
 var DatabaseFactory = angular.module('DatabaseFactory', []);
@@ -806,6 +806,23 @@ FUNCTIONS
 		$scope.display = angular.copy(display);
 	}
 
+
+/***********************************************************************************
+CHECKLIST FUNCTIONS
+***********************************************************************************/
+
+	function checkAll(){
+		if ($scope.selectedMails.allChecked == false){
+			angular.forEach($scope.mailDataList, function(item){
+				$scope.selectedMails.id.push(item.mail_id)
+			})
+			$scope.selectedMails.allChecked = true;
+		} else {
+			$scope.selectedMails.id = [];
+			$scope.selectedMails.allChecked = false;
+		}
+	}
+
 /****************************************************************************
 BINDING FUNCTIONS
 ****************************************************************************/
@@ -818,6 +835,8 @@ BINDING FUNCTIONS
 	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 
 	$scope.formGetMailDataList = formGetMailDataList;
+	$scope.checkAll = checkAll;
+	$scope.checkAllMails = checkAll;
 
 }]);
 var MailingFactory = angular.module('MailingFactory', []);
