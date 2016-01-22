@@ -63,6 +63,13 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});
 	}
 
+	function forwardMailData(data, callback){
+		$http.post('php/mailing/form_forward_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
@@ -73,7 +80,8 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		mailToSelectedCompanies: mailToSelectedCompanies,
 		getMailData: getMailData,
 		overwriteMailData: overwriteMailData,
-		deleteMailData: deleteMailData
+		deleteMailData: deleteMailData,
+		forwardMailData: forwardMailData
 	}
 
 

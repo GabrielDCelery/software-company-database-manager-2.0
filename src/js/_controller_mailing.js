@@ -2,18 +2,22 @@ var MailingCtrl = angular.module('MailingCtrl', []);
 
 MailingCtrl.controller('MailingCtrl', [
 	'$scope', 
+	'$window',
 	'SubMenu', 
 	'FilteredSearch',
 	'Database',
 	'FormatData',
 	'Alerts',
+	'DocMaker',
 	function (
 		$scope, 
+		$window,
 		subMenu,
 		FilteredSearch,
 		Database,
 		FormatData,
-		Alerts
+		Alerts,
+		DocMaker
 	){
 
 /****************************************************************************
@@ -41,6 +45,12 @@ VARIABLES
 			forwarded: false,
 			hasPostalService: true,
 			doesntHavePoastalService: true
+		},
+
+		forwardingMail: {
+			forwardingDate: null,
+			forwardingMethod: null,
+			id: null
 		}
 	}
 
@@ -90,6 +100,29 @@ FORM / SEARCH
 			dataObject.addColourCodingToMail().formatDateCorrectlyForMail();
 			$scope.mailDataList = dataObject.data;
 			$scope.mailDataListMaster = angular.copy($scope.mailDataList);
+		})
+	}
+
+
+/****************************************************************************
+FORM / FORWARD
+****************************************************************************/
+
+	function forwardMails(){
+		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
+			$scope.form.forwardingMail.id = angular.copy($scope.selectedMails.id);
+			Database.forwardMailData($scope.form.forwardingMail, function(response){
+				Alerts.checkSuccess(response);
+			})
+		})
+	}
+
+	function printReceit(){
+		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
+			var filteredData = DocMaker.createDataObjectForReceit(data, $scope.mailDataList);
+			DocMaker.createReceit(filteredData, function(response){
+				window.location.replace('receit.docx');
+			})
 		})
 	}
 
@@ -170,7 +203,6 @@ BINDING FUNCTIONS
 	$scope.menu = menu;
 	$scope.reset = reset;
 
-
 	$scope.filterCompanyNames = filterCompanyNames;
 	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 
@@ -182,5 +214,8 @@ BINDING FUNCTIONS
 	$scope.resetMails = resetMails;
 	$scope.overwriteMails = overwriteMails;
 	$scope.deleteMails = deleteMails;
+
+	$scope.forwardMails = forwardMails;
+	$scope.printReceit = printReceit;
 
 }]);

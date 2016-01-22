@@ -698,6 +698,13 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});
 	}
 
+	function forwardMailData(data, callback){
+		$http.post('php/mailing/form_forward_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
@@ -708,7 +715,8 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		mailToSelectedCompanies: mailToSelectedCompanies,
 		getMailData: getMailData,
 		overwriteMailData: overwriteMailData,
-		deleteMailData: deleteMailData
+		deleteMailData: deleteMailData,
+		forwardMailData: forwardMailData
 	}
 
 
@@ -717,18 +725,22 @@ var MailingCtrl = angular.module('MailingCtrl', []);
 
 MailingCtrl.controller('MailingCtrl', [
 	'$scope', 
+	'$window',
 	'SubMenu', 
 	'FilteredSearch',
 	'Database',
 	'FormatData',
 	'Alerts',
+	'DocMaker',
 	function (
 		$scope, 
+		$window,
 		subMenu,
 		FilteredSearch,
 		Database,
 		FormatData,
-		Alerts
+		Alerts,
+		DocMaker
 	){
 
 /****************************************************************************
@@ -756,6 +768,12 @@ VARIABLES
 			forwarded: false,
 			hasPostalService: true,
 			doesntHavePoastalService: true
+		},
+
+		forwardingMail: {
+			forwardingDate: null,
+			forwardingMethod: null,
+			id: null
 		}
 	}
 
@@ -805,6 +823,29 @@ FORM / SEARCH
 			dataObject.addColourCodingToMail().formatDateCorrectlyForMail();
 			$scope.mailDataList = dataObject.data;
 			$scope.mailDataListMaster = angular.copy($scope.mailDataList);
+		})
+	}
+
+
+/****************************************************************************
+FORM / FORWARD
+****************************************************************************/
+
+	function forwardMails(){
+		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
+			$scope.form.forwardingMail.id = angular.copy($scope.selectedMails.id);
+			Database.forwardMailData($scope.form.forwardingMail, function(response){
+				Alerts.checkSuccess(response);
+			})
+		})
+	}
+
+	function printReceit(){
+		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
+			var filteredData = DocMaker.createDataObjectForReceit(data, $scope.mailDataList);
+			DocMaker.createReceit(filteredData, function(response){
+				window.location.replace('receit.docx');
+			})
 		})
 	}
 
@@ -885,7 +926,6 @@ BINDING FUNCTIONS
 	$scope.menu = menu;
 	$scope.reset = reset;
 
-
 	$scope.filterCompanyNames = filterCompanyNames;
 	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 
@@ -897,6 +937,9 @@ BINDING FUNCTIONS
 	$scope.resetMails = resetMails;
 	$scope.overwriteMails = overwriteMails;
 	$scope.deleteMails = deleteMails;
+
+	$scope.forwardMails = forwardMails;
+	$scope.printReceit = printReceit;
 
 }]);
 var MailingFactory = angular.module('MailingFactory', []);
@@ -1151,9 +1194,37 @@ DocMakerFactory.factory('DocMaker', ['$http', function ($http){
 		})
 	}
 
+
+	function createDataObjectForReceit(arrayId, arrayObjects){
+
+		var filteredData = [];
+		
+		for(var i = 0; i < arrayId.length; i++){
+			for(var j = 0; j < arrayObjects.length; j++){
+				if(arrayId[i] == arrayObjects[j]["mail_id"]){
+					filteredData.push(arrayObjects[j]);
+				}
+			}
+		}
+
+		return(filteredData);
+	}
+
+	function createReceit(input, callback){
+		$http({
+			method: 'POST',
+			url: 'php/mailing/document_create_receit.php',
+			data: input
+		}).success(function(){
+			callback();
+		})
+	}
+
 	return {
 		createContract: createContract,
-		createCover: createCover
+		createCover: createCover,
+		createReceit: createReceit,
+		createDataObjectForReceit:createDataObjectForReceit
 	}
 
 }]);
