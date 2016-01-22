@@ -12,7 +12,8 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'SubMenuFactory',
 	'FilteredSearchFactory',
 	'FormatDataFactory',
-	'AlertsFactory'
+	'AlertsFactory',
+	'DocMakerFactory'
 ]);
 
 DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){
@@ -224,19 +225,23 @@ var CompaniesCtrl = angular.module('CompaniesCtrl', []);
 CompaniesCtrl.controller('CompaniesCtrl', [
 	'$scope', 
 	'$http',
+	'$window',
 	'SubMenu', 
 	'FilteredSearch',
 	'FormatData',
 	'Alerts',
 	'Database',
+	'DocMaker',
 	function (
 		$scope, 
 		$http,
+		$window,
 		SubMenu, 
 		FilteredSearch,
 		FormatData,
 		Alerts,
-		Database
+		Database,
+		DocMaker
 	){
 
 /****************************************************************************
@@ -516,6 +521,22 @@ FORM / ADDNEW
 	}
 
 /****************************************************************************
+DOCUMENT FUNCTIONS
+****************************************************************************/
+
+	function docCreateCover(input){
+		DocMaker.createCover(input, function(){
+			window.location.replace('cover.docx');
+		})
+	}
+
+	function docCreateContract(input){
+		DocMaker.createContract(input, function(){
+			window.location.replace('contract.docx');
+		})
+	}
+
+/****************************************************************************
 MENU / FUNCTIONS
 ****************************************************************************/
 
@@ -549,6 +570,8 @@ BINDING FUNCTIONS
 	$scope.displayCompanyDataList = displayCompanyDataList;
 	$scope.resetFormCompanyDataEdit = resetFormCompanyDataEdit;
 	$scope.resetFormCompanyDataExtend = resetFormCompanyDataExtend;
+	$scope.docCreateCover = docCreateCover;
+	$scope.docCreateContract = docCreateContract;
 
 }]);
 var DatabaseFactory = angular.module('DatabaseFactory', []);
@@ -850,5 +873,35 @@ AlertsFactory.factory('Alerts', [function (){
 		confirmChange: confirmChange
 	}
 
+
+}]);
+var DocMakerFactory = angular.module('DocMakerFactory', []);
+
+DocMakerFactory.factory('DocMaker', ['$http', function ($http){
+
+	function createCover(input, callback){
+		$http({
+			method: 'POST',
+			url: 'php/companies/document_create_cover.php',
+			data: input
+		}).success(function(){
+			callback();
+		})
+	}
+
+	function createContract(input, callback){
+		$http({
+			method: 'POST',
+			url: 'php/companies/document_create_contract.php',
+			data: input
+		}).success(function(){
+			callback();
+		})
+	}
+
+	return {
+		createContract: createContract,
+		createCover: createCover
+	}
 
 }]);

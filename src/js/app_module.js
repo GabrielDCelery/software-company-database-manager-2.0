@@ -12,7 +12,8 @@ var DatabaseApp = angular.module('DatabaseApp', [
 	'SubMenuFactory',
 	'FilteredSearchFactory',
 	'FormatDataFactory',
-	'AlertsFactory'
+	'AlertsFactory',
+	'DocMakerFactory'
 ]);
 
 DatabaseApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider){

@@ -1,0 +1,11 @@
+{
+
+	"config": {
+        "vendor-dir": "public/lib"
+    },
+
+    "require": {
+        "phpoffice/phpword": "^0.12.1",
+        "phpoffice/phpexcel": "^1.8"
+    }
+}
