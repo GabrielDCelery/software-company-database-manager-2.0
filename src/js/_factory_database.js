@@ -45,12 +45,23 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 	}
 
 
-	function getMailDataList(data, callback){
+	function getMailData(data, callback){
 		$http.post('php/mailing/form_search_mails.php', data).success(function(data){
 			callback(data);
 		});
 	}
 
+	function overwriteMailData(data, callback){
+		$http.post('php/mailing/form_overwrite_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+	function deleteMailData(data, callback){
+		$http.post('php/mailing/form_delete_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
 
 	return {
 		getShortCompaniesData: getShortCompaniesData,
@@ -60,7 +71,9 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		extendContract: extendContract,
 		addNewCompany: addNewCompany,
 		mailToSelectedCompanies: mailToSelectedCompanies,
-		getMailDataList: getMailDataList
+		getMailData: getMailData,
+		overwriteMailData: overwriteMailData,
+		deleteMailData: deleteMailData
 	}
 
 

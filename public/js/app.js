@@ -680,12 +680,23 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 	}
 
 
-	function getMailDataList(data, callback){
+	function getMailData(data, callback){
 		$http.post('php/mailing/form_search_mails.php', data).success(function(data){
 			callback(data);
 		});
 	}
 
+	function overwriteMailData(data, callback){
+		$http.post('php/mailing/form_overwrite_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+	function deleteMailData(data, callback){
+		$http.post('php/mailing/form_delete_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
 
 	return {
 		getShortCompaniesData: getShortCompaniesData,
@@ -695,7 +706,9 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		extendContract: extendContract,
 		addNewCompany: addNewCompany,
 		mailToSelectedCompanies: mailToSelectedCompanies,
-		getMailDataList: getMailDataList
+		getMailData: getMailData,
+		overwriteMailData: overwriteMailData,
+		deleteMailData: deleteMailData
 	}
 
 
@@ -764,6 +777,7 @@ VARIABLES
 	$scope.filteredListOfCompanies = [];
 
 	var display = angular.copy($scope.display);
+	$scope.mailDataListMaster = angular.copy($scope.mailDataList);
 
 /****************************************************************************
 FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
@@ -786,10 +800,11 @@ FORM / SEARCH
 ****************************************************************************/
 
 	function formGetMailDataList(searchParams){
-		Database.getMailDataList(searchParams, function(response){
+		Database.getMailData(searchParams, function(response){
 			var dataObject = new FormatData.DataObject(response);
 			dataObject.addColourCodingToMail().formatDateCorrectlyForMail();
 			$scope.mailDataList = dataObject.data;
+			$scope.mailDataListMaster = angular.copy($scope.mailDataList);
 		})
 	}
 
@@ -812,6 +827,27 @@ FORM / EDIT
 		})
 	}
 
+	function resetMails(){
+		$scope.mailDataList = angular.copy($scope.mailDataListMaster);
+	}
+
+	function overwriteMails(){
+		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
+			Database.overwriteMailData($scope.mailDataList, function(response){
+				Alerts.checkSuccess(response);
+			})
+		})
+	}
+
+	function deleteMails(){
+		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
+			Database.deleteMailData(data, function(response){
+				Alerts.checkSuccess(response);
+			})
+		})
+	}
+
+
 /****************************************************************************
 MENU FUNCTIONS
 ****************************************************************************/
@@ -825,7 +861,6 @@ MENU FUNCTIONS
 	function reset(){
 		$scope.display = angular.copy(display);
 	}
-
 
 /***********************************************************************************
 CHECKLIST FUNCTIONS
@@ -859,6 +894,9 @@ BINDING FUNCTIONS
 	$scope.checkAllMails = checkAll;
 
 	$scope.editMails = editMails;
+	$scope.resetMails = resetMails;
+	$scope.overwriteMails = overwriteMails;
+	$scope.deleteMails = deleteMails;
 
 }]);
 var MailingFactory = angular.module('MailingFactory', []);
