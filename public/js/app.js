@@ -820,7 +820,7 @@ FORM / SEARCH
 	function formGetMailDataList(searchParams){
 		Database.getMailData(searchParams, function(response){
 			var dataObject = new FormatData.DataObject(response);
-			dataObject.addColourCodingToMail().formatDateCorrectlyForMail();
+			dataObject.formatDateCorrectlyForMail().addColourCodingToMail();
 			$scope.mailDataList = dataObject.data;
 			$scope.mailDataListMaster = angular.copy($scope.mailDataList);
 		})
