@@ -1,0 +1,20 @@
+<table class="table table-bordered">
+	<tr class="info">
+		<td><input type="checkbox"></td>
+		<td ng-click="sortField = 'company_name'; reverseSortField = !reverseSortField">CÉG NEVE</td>
+		<td ng-click="sortField = 'sender_name'; reverseSortField = !reverseSortField">FELADÓ NEVE</td>
+		<td ng-click="sortField = 'sender_address'; reverseSortField = !reverseSortField">FELADÓ CÍME</td>
+		<td ng-click="sortField = 'receiving_date'; reverseSortField = !reverseSortField">ÉRK. DÁTUM</td>
+		<td ng-click="sortField = 'forwarding_date'; reverseSortField = !reverseSortField">TOVÁBB. DÁTUM</td>
+		<td ng-click="sortField = 'forwarding_method'; reverseSortField = !reverseSortField">TOVÁBB. MÓDJA</td>
+	</tr>
+	<tr ng-repeat="mail in mailDataList | orderBy:sortField:reverseSortField" ng-class="{green:'success', yellow:'warning', red:'danger'}[mail.css_color]">
+		<td><input type="checkbox" checklist-model="selectedMails.id" checklist-value="mail.mail_id"></td>
+		<td>{{mail.company_name}}</td>
+		<td>{{mail.sender_name}}</td>
+		<td>{{mail.sender_address}}</td>
+		<td>{{mail.receiving_date | date: "yyyy-MM-dd"}}</td>
+		<td>{{mail.forwarding_date | date: "yyyy-MM-dd"}}</td>
+		<td>{{mail.forwarding_method}}</td>
+	</tr>
+</table>

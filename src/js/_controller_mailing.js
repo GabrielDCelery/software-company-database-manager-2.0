@@ -1,6 +1,18 @@
 var MailingCtrl = angular.module('MailingCtrl', []);
 
-MailingCtrl.controller('MailingCtrl', ['$scope', 'subMenu', function ($scope, subMenu){
+MailingCtrl.controller('MailingCtrl', [
+	'$scope', 
+	'SubMenu', 
+	'FilteredSearch',
+	'Database',
+	'FormatData',
+	function (
+		$scope, 
+		subMenu,
+		FilteredSearch,
+		Database,
+		FormatData
+	){
 
 /****************************************************************************
 VARIABLES
@@ -12,12 +24,71 @@ VARIABLES
 			forwardMails: false,
 			editMails: false,
 			addNewMails: false
+		},
+		data: {
+			list: true
 		}
+	}
+
+	$scope.form = {
+		searchMail: {
+			companyName: "",
+			startingDate: null,
+			endingDate: null,
+			nonForwarded: true,
+			forwarded: false,
+			hasPostalService: true,
+			doesntHavePoastalService: true
+		}
+	}
+
+	/* Short list of companies */
+
+	$scope.mailDataList = [];
+	$scope.sortField = 'company_name';
+	$scope.reverseSortField = false;
+
+	/* Object holding the information of checkboxes */
+
+	$scope.selectedMails = {
+		id: [],
+		allChecked: false
 	}
 
 	/* Master objects */
 
+	$scope.filteredListOfCompanies = [];
+
 	var display = angular.copy($scope.display);
+
+/****************************************************************************
+FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
+****************************************************************************/
+
+	function filterCompanyNames(input){
+		FilteredSearch.filterCompanyNames(input, function(data){
+			$scope.filteredListOfCompanies = data;
+		})
+	};
+
+	function insertCompanyNameToInputField(companyName){
+		$scope.form.searchMail.companyName = companyName;
+		$scope.filteredListOfCompanies = [];
+	};
+
+
+/****************************************************************************
+FORM / SEARCH
+****************************************************************************/
+
+	function formGetMailDataList(searchParams){
+		Database.getMailDataList(searchParams, function(response){
+			var dataObject = new FormatData.DataObject(response);
+			dataObject.addColourCodingToMail().formatDateCorrectlyForMail();
+			$scope.mailDataList = dataObject.data;
+		})
+	}
+
 
 /****************************************************************************
 FUNCTIONS
@@ -41,6 +112,9 @@ BINDING FUNCTIONS
 	$scope.reset = reset;
 
 
+	$scope.filterCompanyNames = filterCompanyNames;
+	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 
+	$scope.formGetMailDataList = formGetMailDataList;
 
 }]);

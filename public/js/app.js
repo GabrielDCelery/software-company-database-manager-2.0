@@ -661,6 +661,14 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});		
 	}
 
+
+	function getMailDataList(data, callback){
+		$http.post('php/mailing/form_search_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
@@ -668,14 +676,27 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		changeContractStatus: changeContractStatus,
 		extendContract: extendContract,
 		addNewCompany: addNewCompany,
-		mailToSelectedCompanies: mailToSelectedCompanies
+		mailToSelectedCompanies: mailToSelectedCompanies,
+		getMailDataList: getMailDataList
 	}
 
 
 }]);
 var MailingCtrl = angular.module('MailingCtrl', []);
 
-MailingCtrl.controller('MailingCtrl', ['$scope', 'subMenu', function ($scope, subMenu){
+MailingCtrl.controller('MailingCtrl', [
+	'$scope', 
+	'SubMenu', 
+	'FilteredSearch',
+	'Database',
+	'FormatData',
+	function (
+		$scope, 
+		subMenu,
+		FilteredSearch,
+		Database,
+		FormatData
+	){
 
 /****************************************************************************
 VARIABLES
@@ -687,12 +708,71 @@ VARIABLES
 			forwardMails: false,
 			editMails: false,
 			addNewMails: false
+		},
+		data: {
+			list: true
 		}
+	}
+
+	$scope.form = {
+		searchMail: {
+			companyName: "",
+			startingDate: null,
+			endingDate: null,
+			nonForwarded: true,
+			forwarded: false,
+			hasPostalService: true,
+			doesntHavePoastalService: true
+		}
+	}
+
+	/* Short list of companies */
+
+	$scope.mailDataList = [];
+	$scope.sortField = 'company_name';
+	$scope.reverseSortField = false;
+
+	/* Object holding the information of checkboxes */
+
+	$scope.selectedMails = {
+		id: [],
+		allChecked: false
 	}
 
 	/* Master objects */
 
+	$scope.filteredListOfCompanies = [];
+
 	var display = angular.copy($scope.display);
+
+/****************************************************************************
+FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
+****************************************************************************/
+
+	function filterCompanyNames(input){
+		FilteredSearch.filterCompanyNames(input, function(data){
+			$scope.filteredListOfCompanies = data;
+		})
+	};
+
+	function insertCompanyNameToInputField(companyName){
+		$scope.form.searchMail.companyName = companyName;
+		$scope.filteredListOfCompanies = [];
+	};
+
+
+/****************************************************************************
+FORM / SEARCH
+****************************************************************************/
+
+	function formGetMailDataList(searchParams){
+		Database.getMailDataList(searchParams, function(response){
+			var dataObject = new FormatData.DataObject(response);
+			dataObject.addColourCodingToMail().formatDateCorrectlyForMail();
+			$scope.mailDataList = dataObject.data;
+		})
+	}
+
 
 /****************************************************************************
 FUNCTIONS
@@ -716,7 +796,10 @@ BINDING FUNCTIONS
 	$scope.reset = reset;
 
 
+	$scope.filterCompanyNames = filterCompanyNames;
+	$scope.insertCompanyNameToInputField = insertCompanyNameToInputField;
 
+	$scope.formGetMailDataList = formGetMailDataList;
 
 }]);
 var MailingFactory = angular.module('MailingFactory', []);
@@ -875,6 +958,30 @@ FormatDataFactory.factory('FormatData', [function (){
 				obj.postal_service = 1;
 			} else {
 				obj.postal_service = 0;
+			}
+		})
+		return this;
+	}
+
+	DataObject.prototype.addColourCodingToMail = function(){
+		this.data.map(function(obj){
+			obj.show_input = false;
+			if (obj.forwarding_date == null){
+				obj.css_color = "yellow";
+			} else {
+				obj.css_color = "green";
+			}
+		})
+		return this;
+	}
+
+	DataObject.prototype.formatDateCorrectlyForMail = function(){
+		this.data.map(function(obj){
+			obj.receiving_date = convertDate(obj.receiving_date);
+			if(obj.forwarding_date == "1970-01-01" || obj.forwarding_date == "0000-00-00" || obj.forwarding_date == null){
+				obj.forwarding_date = null;
+			} else {
+				obj.forwarding_date = convertDate(obj.forwarding_date);
 			}
 		})
 		return this;

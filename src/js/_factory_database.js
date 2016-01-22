@@ -44,6 +44,14 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});		
 	}
 
+
+	function getMailDataList(data, callback){
+		$http.post('php/mailing/form_search_mails.php', data).success(function(data){
+			callback(data);
+		});
+	}
+
+
 	return {
 		getShortCompaniesData: getShortCompaniesData,
 		getDetailedCompaniesData: getDetailedCompaniesData,
@@ -51,7 +59,8 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		changeContractStatus: changeContractStatus,
 		extendContract: extendContract,
 		addNewCompany: addNewCompany,
-		mailToSelectedCompanies: mailToSelectedCompanies
+		mailToSelectedCompanies: mailToSelectedCompanies,
+		getMailDataList: getMailDataList
 	}
 
 

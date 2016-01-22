@@ -72,6 +72,30 @@ FormatDataFactory.factory('FormatData', [function (){
 		return this;
 	}
 
+	DataObject.prototype.addColourCodingToMail = function(){
+		this.data.map(function(obj){
+			obj.show_input = false;
+			if (obj.forwarding_date == null){
+				obj.css_color = "yellow";
+			} else {
+				obj.css_color = "green";
+			}
+		})
+		return this;
+	}
+
+	DataObject.prototype.formatDateCorrectlyForMail = function(){
+		this.data.map(function(obj){
+			obj.receiving_date = convertDate(obj.receiving_date);
+			if(obj.forwarding_date == "1970-01-01" || obj.forwarding_date == "0000-00-00" || obj.forwarding_date == null){
+				obj.forwarding_date = null;
+			} else {
+				obj.forwarding_date = convertDate(obj.forwarding_date);
+			}
+		})
+		return this;
+	}
+
 	return {
 		DataObject: DataObject
 	}
