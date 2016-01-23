@@ -32,7 +32,6 @@ if(!is_null($forwarding_date)){
 }
 $forwarding_method = $dataobjects->forwardingMethod;
 $id_list = $dataobjects->id;
-
 foreach($id_list as $id){
 	$q = 'UPDATE mailing SET ';
 	$q .= 'forwarding_date = "' . $forwarding_date . '", ';

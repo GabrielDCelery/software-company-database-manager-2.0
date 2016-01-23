@@ -866,8 +866,7 @@ FORM / FORWARD
 
 	function forwardMails(){
 		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
-			$scope.form.forwardMail.id = angular.copy($scope.selectedMails.id);
-			console.log($scope.form.forwardMail.id)
+			$scope.form.forwardMail.id = data;
 			Database.forwardMailData($scope.form.forwardMail, function(response){
 				Alerts.checkSuccess(response);
 				$scope.form.searchMail.forwarded = true;
