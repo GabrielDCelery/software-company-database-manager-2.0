@@ -32,7 +32,7 @@ VARIABLES
 			addNewMails: false
 		},
 		data: {
-			list: true
+			list: false
 		}
 	}
 
@@ -82,8 +82,22 @@ VARIABLES
 	$scope.filteredListOfCompanies = [];
 	$scope.filteredListOfMailingAddresses = [];
 
-	var display = angular.copy($scope.display);
+	$scope.displayReset = angular.copy($scope.display);
 	$scope.mailDataListMaster = angular.copy($scope.mailDataList);
+	$scope.formMaster = angular.copy($scope.form);
+
+/****************************************************************************
+ENCAPSULATED FUNCTIONS
+****************************************************************************/
+
+	function showMailDataList(){
+		$scope.display.data.list = true;
+		$scope.display.form.searchMails = false;
+		$scope.display.form.forwardMails = false;
+		$scope.display.form.editMails = false;
+		$scope.selectedMails.id = [];
+		$scope.selectedMails.allChecked = false;
+	}
 
 /****************************************************************************
 FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
@@ -111,7 +125,7 @@ FORM / SEARCH
 			var dataObject = new FormatData.DataObject(response);
 			dataObject.formatDateCorrectlyForMail().addColourCodingToMail();
 			$scope.mailDataList = dataObject.data;
-			$scope.mailDataListMaster = angular.copy($scope.mailDataList);
+			showMailDataList();
 		})
 	}
 
@@ -123,8 +137,11 @@ FORM / FORWARD
 	function forwardMails(){
 		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
 			$scope.form.forwardMail.id = angular.copy($scope.selectedMails.id);
+			console.log($scope.form.forwardMail.id)
 			Database.forwardMailData($scope.form.forwardMail, function(response){
 				Alerts.checkSuccess(response);
+				$scope.form.searchMail.forwarded = true;
+				formGetMailDataList($scope.form.searchMail);
 			})
 		})
 	}
@@ -165,6 +182,7 @@ FORM / EDIT
 		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
 			Database.overwriteMailData($scope.mailDataList, function(response){
 				Alerts.checkSuccess(response);
+				formGetMailDataList($scope.form.searchMail);
 			})
 		})
 	}
@@ -173,6 +191,7 @@ FORM / EDIT
 		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
 			Database.deleteMailData(data, function(response){
 				Alerts.checkSuccess(response);
+				formGetMailDataList($scope.form.searchMail);
 			})
 		})
 	}
@@ -221,6 +240,17 @@ FORM / ADDNEW
 		Alerts.fillAddNewMailsForm($scope.form.addNewMail.companyName, $scope.form.addNewMail.receivingDate, $scope.form.addNewMail.mails, function(){
 			Database.addNewMails($scope.form.addNewMail, function(response){
 				Alerts.checkSuccess(response);
+				$scope.form.searchMail = {
+						companyName: $scope.form.addNewMail.companyName,
+						startingDate: null,
+						endingDate: null,
+						nonForwarded: true,
+						forwarded: false,
+						hasPostalService: true,
+						doesntHavePoastalService: true
+				}
+				formGetMailDataList($scope.form.searchMail);
+				showMailDataList();
 			})
 		})
 	}
@@ -236,7 +266,10 @@ MENU FUNCTIONS
 	}
 
 	function reset(){
-		$scope.display = angular.copy(display);
+		$scope.display = angular.copy($scope.displayReset);
+		$scope.mailDataList = [];
+		$scope.form = angular.copy($scope.formMaster);
+		$scope.display.data.list = false;
 	}
 
 /***********************************************************************************
