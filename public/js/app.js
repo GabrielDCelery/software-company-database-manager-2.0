@@ -704,6 +704,12 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		});
 	}
 
+	function addNewMails(data, callback){
+		$http.post('php/mailing/form_add_new_mails.php', data).success(function(data){
+			callback(data);
+		});	
+	}
+
 
 	return {
 		getShortCompaniesData: getShortCompaniesData,
@@ -716,7 +722,8 @@ DatabaseFactory.factory('Database', ['$http', function ($http){
 		getMailData: getMailData,
 		overwriteMailData: overwriteMailData,
 		deleteMailData: deleteMailData,
-		forwardMailData: forwardMailData
+		forwardMailData: forwardMailData,
+		addNewMails: addNewMails
 	}
 
 
@@ -770,10 +777,20 @@ VARIABLES
 			doesntHavePoastalService: true
 		},
 
-		forwardingMail: {
+		forwardMail: {
 			forwardingDate: null,
 			forwardingMethod: null,
 			id: null
+		},
+
+		addNewMail: {
+			companyName: "",
+			receivingDate: null,
+			mails: [{
+				senderName: "",
+				senderAddress: "",
+				activeField: false
+			}]
 		}
 	}
 
@@ -793,6 +810,7 @@ VARIABLES
 	/* Master objects */
 
 	$scope.filteredListOfCompanies = [];
+	$scope.filteredListOfMailingAddresses = [];
 
 	var display = angular.copy($scope.display);
 	$scope.mailDataListMaster = angular.copy($scope.mailDataList);
@@ -809,6 +827,7 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 
 	function insertCompanyNameToInputField(companyName){
 		$scope.form.searchMail.companyName = companyName;
+		$scope.form.addNewMail.companyName = companyName;
 		$scope.filteredListOfCompanies = [];
 	};
 
@@ -833,8 +852,8 @@ FORM / FORWARD
 
 	function forwardMails(){
 		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
-			$scope.form.forwardingMail.id = angular.copy($scope.selectedMails.id);
-			Database.forwardMailData($scope.form.forwardingMail, function(response){
+			$scope.form.forwardMail.id = angular.copy($scope.selectedMails.id);
+			Database.forwardMailData($scope.form.forwardMail, function(response){
 				Alerts.checkSuccess(response);
 			})
 		})
@@ -890,6 +909,53 @@ FORM / EDIT
 
 
 /****************************************************************************
+FORM / ADDNEW
+****************************************************************************/
+
+	function addNewRowToAddMailForm(){
+		$scope.form.addNewMail.mails.push({
+			senderName: "",
+			senderAddress: ""
+		});
+	}
+
+	function removeRowFromAddMailForm(newMail){
+		var index = $scope.form.addNewMail.mails.indexOf(newMail);
+		if(index != -1 && $scope.form.addNewMail.mails.length > 1){
+			$scope.form.addNewMail.mails.splice(index, 1);
+		}
+	}
+
+	function filterListOfMailingAddresses(newMail){
+		FilteredSearch.filterMailingAddresses(newMail.senderName, newMail.senderAddress, function(data){
+			$scope.filteredListOfMailingAddresses = data;
+			var index = $scope.form.addNewMail.mails.indexOf(newMail);
+			for(var i = 0; i < $scope.form.addNewMail.mails.length; i++){
+				$scope.form.addNewMail.mails[i].activeField = false;
+			}
+			$scope.form.addNewMail.mails[index].activeField = true;
+		})
+	}
+
+	function insertMailingAddressToAddNewMailField(mailingAddress){
+		for(var i = 0; i < $scope.form.addNewMail.mails.length; i++){
+			if($scope.form.addNewMail.mails[i].activeField == true){
+				$scope.form.addNewMail.mails[i].senderName = mailingAddress.sender_name;
+				$scope.form.addNewMail.mails[i].senderAddress = mailingAddress.sender_address;
+			}
+		}
+		$scope.filteredListOfMailingAddresses = [];
+	}
+
+	function addNewMails(){
+		Alerts.fillAddNewMailsForm($scope.form.addNewMail.companyName, $scope.form.addNewMail.receivingDate, $scope.form.addNewMail.mails, function(){
+			Database.addNewMails($scope.form.addNewMail, function(response){
+				Alerts.checkSuccess(response);
+			})
+		})
+	}
+
+/****************************************************************************
 MENU FUNCTIONS
 ****************************************************************************/
 
@@ -941,6 +1007,13 @@ BINDING FUNCTIONS
 	$scope.forwardMails = forwardMails;
 	$scope.printReceit = printReceit;
 
+	$scope.filterListOfMailingAddresses = filterListOfMailingAddresses;
+	$scope.insertMailingAddressToAddNewMailField = insertMailingAddressToAddNewMailField;
+
+	$scope.addNewRowToAddMailForm = addNewRowToAddMailForm;
+	$scope.removeRowFromAddMailForm = removeRowFromAddMailForm;
+	$scope.addNewMails = addNewMails;
+
 }]);
 var MailingFactory = angular.module('MailingFactory', []);
 
@@ -974,6 +1047,7 @@ FilteredSearchFactory.factory('FilteredSearch', ['$http', function ($http){
 
 	var cachedCompanies;
 	var cachedManagers;
+	var cachedMailingAddresses;
 
 	function getCompanies(callback){
 		if(cachedCompanies){
@@ -997,7 +1071,18 @@ FilteredSearchFactory.factory('FilteredSearch', ['$http', function ($http){
 		}
 	}
 
-	function filter(input, arrayOfNames){
+	function getMailingAddresses(callback){
+		if(cachedMailingAddresses){
+			callback(cachedMailingAddresses);
+		} else {
+			$http.get('php/mailing/fetch_mailing_addresses.php').success(function(data){
+				cachedMailingAddresses = data;
+				callback(data);
+			});
+		}
+	}
+
+	function filterNames(input, arrayOfNames){
 		var listOfNames = arrayOfNames;
 		var filteredListOfNames = [];
 		if(input.length !==0){
@@ -1012,19 +1097,36 @@ FilteredSearchFactory.factory('FilteredSearch', ['$http', function ($http){
 
 	function filterCompanyNames(input, callback){
 		getCompanies(function (data){
-			callback(filter(input, data));
+			callback(filterNames(input, data));
 		});
 	}
 
 	function filterManagerNames(input, callback){
 		getManagers(function (data){
-			callback(filter(input, data));
+			callback(filterNames(input, data));
+		});
+	}
+
+	function filterMailingAddresses(inputSenderName, inputSenderAddress, callback){
+		var listOfMailingAddresses = [];
+		var filteredListOfMailingAddresses = [];
+		getMailingAddresses(function(data){
+			listOfMailingAddresses = data;
+			if(inputSenderName.length !==0 || inputSenderAddress.length !==0){
+				for(var i=0; i < listOfMailingAddresses.length; i++){
+					if(listOfMailingAddresses[i].sender_name.substring(0,inputSenderName.length).toLowerCase() === inputSenderName.toLowerCase() && listOfMailingAddresses[i].sender_address.substring(0,inputSenderAddress.length).toLowerCase() === inputSenderAddress.toLowerCase()){
+						filteredListOfMailingAddresses.push(listOfMailingAddresses[i]);
+					}
+				}
+			}
+			callback(filteredListOfMailingAddresses);	
 		});
 	}
 
 	return {
 		filterCompanyNames: filterCompanyNames,
-		filterManagerNames: filterManagerNames
+		filterManagerNames: filterManagerNames,
+		filterMailingAddresses: filterMailingAddresses
 	}
 
 
@@ -1162,10 +1264,30 @@ AlertsFactory.factory('Alerts', [function (){
 		}
 	}
 
+	function fillAddNewMailsForm(companyName, receivingDate, mailsArray, callback){
+
+		var alertToFillData = false;
+
+		if(companyName == null || companyName == ''){alertToFillData = true;}
+		if(receivingDate == null){alertToFillData = true;}
+		for(var i = 0; i < mailsArray.length; i++){
+			if(mailsArray[i].senderName.length == 0 || mailsArray[i].senderAddress.length == 0){
+				alertToFillData = true;
+			}
+		}
+		if(alertToFillData == true){
+			alert('Minden mezőt kötelező kitölteni!');
+		} else {
+			callback();
+		}
+
+	}
+
 	return {
 		isAnythingSelected: isAnythingSelected,
 		checkSuccess: checkSuccess,
-		confirmChange: confirmChange
+		confirmChange: confirmChange,
+		fillAddNewMailsForm: fillAddNewMailsForm
 	}
 
 

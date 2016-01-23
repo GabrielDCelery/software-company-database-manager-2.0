@@ -47,10 +47,20 @@ VARIABLES
 			doesntHavePoastalService: true
 		},
 
-		forwardingMail: {
+		forwardMail: {
 			forwardingDate: null,
 			forwardingMethod: null,
 			id: null
+		},
+
+		addNewMail: {
+			companyName: "",
+			receivingDate: null,
+			mails: [{
+				senderName: "",
+				senderAddress: "",
+				activeField: false
+			}]
 		}
 	}
 
@@ -70,6 +80,7 @@ VARIABLES
 	/* Master objects */
 
 	$scope.filteredListOfCompanies = [];
+	$scope.filteredListOfMailingAddresses = [];
 
 	var display = angular.copy($scope.display);
 	$scope.mailDataListMaster = angular.copy($scope.mailDataList);
@@ -86,6 +97,7 @@ FORM / SEARCH / FILTER COMPANY/MANAGER NAMES
 
 	function insertCompanyNameToInputField(companyName){
 		$scope.form.searchMail.companyName = companyName;
+		$scope.form.addNewMail.companyName = companyName;
 		$scope.filteredListOfCompanies = [];
 	};
 
@@ -110,8 +122,8 @@ FORM / FORWARD
 
 	function forwardMails(){
 		Alerts.isAnythingSelected($scope.selectedMails.id, function(data){
-			$scope.form.forwardingMail.id = angular.copy($scope.selectedMails.id);
-			Database.forwardMailData($scope.form.forwardingMail, function(response){
+			$scope.form.forwardMail.id = angular.copy($scope.selectedMails.id);
+			Database.forwardMailData($scope.form.forwardMail, function(response){
 				Alerts.checkSuccess(response);
 			})
 		})
@@ -167,6 +179,53 @@ FORM / EDIT
 
 
 /****************************************************************************
+FORM / ADDNEW
+****************************************************************************/
+
+	function addNewRowToAddMailForm(){
+		$scope.form.addNewMail.mails.push({
+			senderName: "",
+			senderAddress: ""
+		});
+	}
+
+	function removeRowFromAddMailForm(newMail){
+		var index = $scope.form.addNewMail.mails.indexOf(newMail);
+		if(index != -1 && $scope.form.addNewMail.mails.length > 1){
+			$scope.form.addNewMail.mails.splice(index, 1);
+		}
+	}
+
+	function filterListOfMailingAddresses(newMail){
+		FilteredSearch.filterMailingAddresses(newMail.senderName, newMail.senderAddress, function(data){
+			$scope.filteredListOfMailingAddresses = data;
+			var index = $scope.form.addNewMail.mails.indexOf(newMail);
+			for(var i = 0; i < $scope.form.addNewMail.mails.length; i++){
+				$scope.form.addNewMail.mails[i].activeField = false;
+			}
+			$scope.form.addNewMail.mails[index].activeField = true;
+		})
+	}
+
+	function insertMailingAddressToAddNewMailField(mailingAddress){
+		for(var i = 0; i < $scope.form.addNewMail.mails.length; i++){
+			if($scope.form.addNewMail.mails[i].activeField == true){
+				$scope.form.addNewMail.mails[i].senderName = mailingAddress.sender_name;
+				$scope.form.addNewMail.mails[i].senderAddress = mailingAddress.sender_address;
+			}
+		}
+		$scope.filteredListOfMailingAddresses = [];
+	}
+
+	function addNewMails(){
+		Alerts.fillAddNewMailsForm($scope.form.addNewMail.companyName, $scope.form.addNewMail.receivingDate, $scope.form.addNewMail.mails, function(){
+			Database.addNewMails($scope.form.addNewMail, function(response){
+				Alerts.checkSuccess(response);
+			})
+		})
+	}
+
+/****************************************************************************
 MENU FUNCTIONS
 ****************************************************************************/
 
@@ -217,5 +276,12 @@ BINDING FUNCTIONS
 
 	$scope.forwardMails = forwardMails;
 	$scope.printReceit = printReceit;
+
+	$scope.filterListOfMailingAddresses = filterListOfMailingAddresses;
+	$scope.insertMailingAddressToAddNewMailField = insertMailingAddressToAddNewMailField;
+
+	$scope.addNewRowToAddMailForm = addNewRowToAddMailForm;
+	$scope.removeRowFromAddMailForm = removeRowFromAddMailForm;
+	$scope.addNewMails = addNewMails;
 
 }]);

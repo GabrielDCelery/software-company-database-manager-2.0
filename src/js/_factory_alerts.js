@@ -27,10 +27,30 @@ AlertsFactory.factory('Alerts', [function (){
 		}
 	}
 
+	function fillAddNewMailsForm(companyName, receivingDate, mailsArray, callback){
+
+		var alertToFillData = false;
+
+		if(companyName == null || companyName == ''){alertToFillData = true;}
+		if(receivingDate == null){alertToFillData = true;}
+		for(var i = 0; i < mailsArray.length; i++){
+			if(mailsArray[i].senderName.length == 0 || mailsArray[i].senderAddress.length == 0){
+				alertToFillData = true;
+			}
+		}
+		if(alertToFillData == true){
+			alert('Minden mezőt kötelező kitölteni!');
+		} else {
+			callback();
+		}
+
+	}
+
 	return {
 		isAnythingSelected: isAnythingSelected,
 		checkSuccess: checkSuccess,
-		confirmChange: confirmChange
+		confirmChange: confirmChange,
+		fillAddNewMailsForm: fillAddNewMailsForm
 	}
 
 

@@ -1,1 +1,45 @@
-form-addnew
+<div class="jumbotron">
+	<form>
+		<div class="form-group row">
+			<label class="col-sm-2" for="company-name">Cég neve</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="company-name" ng-model="form.addNewMail.companyName" ng-keyup="filterCompanyNames(form.addNewMail.companyName)">
+			</div>
+			<label class="col-sm-2" for="mail-date">Dátum</label>
+			<div class="col-sm-4">
+				<input type="date" class="form-control" id="mail-date" ng-model="form.addNewMail.receivingDate">
+			</div>
+		</div>
+
+		<div class="form-group row" ng-repeat="newMail in form.addNewMail.mails">
+			<label class="col-sm-2">Feladó neve</label>
+			<div class="col-sm-2">
+				<input type="text" class="form-control" ng-model="newMail.senderName" ng-keyup="filterListOfMailingAddresses(newMail)">
+			</div>
+			<label class="col-sm-2" for="mail-date">Feladó címe</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" ng-model="newMail.senderAddress" ng-keyup="filterListOfMailingAddresses(newMail)">
+			</div>
+			<div class="col-sm-1">
+				<button type="submit" class="btn btn-default btn-lg btn-default" ng-click="addNewRowToAddMailForm()">+</button>
+			</div>
+			<div class="col-sm-1">
+				<button type="submit" class="btn btn-default btn-lg btn-default" ng-click="removeRowFromAddMailForm(newMail)">-</button>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<button type="submit" class="btn btn-default btn-lg btn-primary" ng-click="addNewMails()">Új levelek hozzáadása</button>
+		</div>
+
+	</form>
+
+</div>
+
+<div>
+	<button type="button" class="btn btn-primary" ng-repeat="company in filteredListOfCompanies" ng-click="insertCompanyNameToInputField(company)">{{company}}</button>
+</div>
+
+<div>
+	<button type="button" class="btn btn-primary" ng-repeat="mailingAddress in filteredListOfMailingAddresses" ng-click="insertMailingAddressToAddNewMailField(mailingAddress)">{{mailingAddress.sender_name}}, {{mailingAddress.sender_address}}</button>
+</div>
