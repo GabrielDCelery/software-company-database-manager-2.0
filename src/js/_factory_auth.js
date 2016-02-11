@@ -4,12 +4,14 @@ var AuthFactory = angular.module('AuthFactory', []);
 AuthFactory.factory('AuthFactory', ['$http', '$cookies', function ($http, $cookies){
 
 	function login(username, password, callback){
+		password = Base64.encode(password);
 		$http.post('php/login.php', {username: username, password: password}).success(callback);
 	}
 
 	function setLoginCookie(username, password){
+
 		var authUsername = Base64.encode(username);
-		var authPassword = Base64.encode(password);
+		var authPassword = Base64.encode(cookieEncoder.encode(password));
 
 		var user = {
 			username: authUsername,
@@ -27,9 +29,22 @@ AuthFactory.factory('AuthFactory', ['$http', '$cookies', function ($http, $cooki
 		var authCookie = $cookies.getObject('userCookie');
 		if(authCookie){
 			var username = Base64.decode(authCookie.username);
-			var password = Base64.decode(authCookie.password);
+			var password = cookieEncoder.decode(Base64.decode(authCookie.password));
 
 			callback(username, password);
+		}
+	}
+
+	// Password encoder
+	var cookieEncoder = {
+		secretOne: "kuhp",
+		secretTwo: "w894",
+		encode: function(password){
+			return this.secretOne + password + this.secretTwo;
+		},
+		decode: function(encodedPassword){
+		    encodedPassword = encodedPassword.slice(this.secretOne.length);
+		    return encodedPassword.slice(0, encodedPassword.length - this.secretTwo.length);
 		}
 	}
 
