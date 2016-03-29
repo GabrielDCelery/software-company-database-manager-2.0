@@ -345,8 +345,10 @@ DOCUMENT FUNCTIONS
 	}
 
 	function docCreateContract(input){
-		DocMaker.createContract(input, function(){
-			window.location.replace('contract.docx');
+		formatCompanyDetailedDataForDatabase(input, function(input){
+			DocMaker.createContract(input[0], function(){
+				window.location.replace('contract.docx');
+			})
 		})
 	}
 
