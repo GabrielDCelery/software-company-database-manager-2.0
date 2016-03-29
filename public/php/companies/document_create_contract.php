@@ -63,11 +63,16 @@ switch ($service_provider) {
 DATA OF THE CONTRACTOR
 *****************************************************************************/
 
-$contractor_manager_name = 'Zeller-Daczi Gábor';
+$contractor_landlord_name = 'Zeller Ildikó Anna';
+$contractor_landlord_status = 'meghatalmazott';
+$contractor_landlord_id = '898103KA';
+$contractor_landlord_address = '1035 Budapest, Miklós u. 13. VIII/42.';
+$contractor_landlord_mother_name = 'Vizslovszki Ildikó';
+$contractor_manager_name = 'Zeller Ildikó Anna';
 $contractor_manager_status = 'ügyvezető';
-$contractor_manager_id = '615912KA';
+$contractor_manager_id = '898103KA';
 $contractor_manager_address = '1035 Budapest, Miklós u. 13. VIII/42.';
-$contractor_manager_mother_name = 'Zeller Ildikó Anna';
+$contractor_manager_mother_name = 'Vizslovszki Ildikó';
 
 /*****************************************************************************
 CREATING THE DOCUMENT TEMPLATE
@@ -153,7 +158,7 @@ $section->addText(
 		$manager_name . ', ' . $manager_status . ' (' . $manager_address . ', ig.sz.: ' . $manager_id . ', an.neve: ' . $manager_mother_name . ')' .
 		', mint Bérlő, ' .
 		"\n" .
-		'	másrészről ' . $contractor_manager_name . ' (' . $contractor_manager_address . ', ig.sz.: ' . $contractor_manager_id . ', an.neve: ' . $contractor_manager_mother_name . ') ' .
+		'	másrészről ' . $contractor_landlord_name . ' (' . $contractor_landlord_address . ', ig.sz.: ' . $contractor_landlord_id . ', an.neve: ' . $contractor_landlord_mother_name . ') ' .
 		'mint Bérbeadó között a mai napon az alábbiak szerint:' .
 		"\n"
 	),
