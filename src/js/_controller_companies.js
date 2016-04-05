@@ -69,7 +69,7 @@ VARIABLES
 			service_provider: "Zeller és Zeller Kft.",
 			transfer_date: new Date(),
 			invoice_date: new Date(),
-			payment_method: "",
+			payment_method: "készpénz",
 			account_number: "",
 			price_of_serv_num: 0,
 			price_of_serv_let: "",
