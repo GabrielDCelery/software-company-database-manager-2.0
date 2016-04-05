@@ -327,6 +327,7 @@ FORM / ADDNEW
 ****************************************************************************/	
 
 	function addNewCompany(data){
+		var data = angular.copy(data);
 		formatCompanyDetailedDataForDatabase(data, function(data){
 			Database.addNewCompany(data, function(response){
 				Alerts.checkSuccess(response);
@@ -345,6 +346,7 @@ DOCUMENT FUNCTIONS
 	}
 
 	function docCreateContract(input){
+		var input = angular.copy(input);
 		formatCompanyDetailedDataForDatabase(input, function(input){
 			DocMaker.createContract(input[0], function(){
 				window.location.replace('contract.docx');
