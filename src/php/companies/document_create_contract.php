@@ -99,7 +99,7 @@ $phpWord->addFontStyle(
 /*****************************************************************************
 CONTENT OF PAGE 0
 *****************************************************************************/
-
+/*
 $section->addText(
 	htmlspecialchars(
 		'SZÉKHELYHASZNÁLATI HOZZÁJÁRULÁS' .
@@ -138,14 +138,14 @@ $section->addText(
 	$baseFont
 );
 $section->addPageBreak();
-
+*/
 /*****************************************************************************
 CONTENT OF PAGE 1
 *****************************************************************************/
 
 $section->addText(
 	htmlspecialchars(
-		'SZÉKHELYHASZNÁLATI SZERZŐDÉS' .
+		'MEGBÍZÁSI SZERZŐDÉS' .
 		"\n"
 	),
 	$titleFont
@@ -156,43 +156,44 @@ $section->addText(
 		$company_name . ' (' . $company_address . ', cégj.: ' . $company_register_id . ')' .
 		', képviseli: ' .
 		$manager_name . ', ' . $manager_status . ' (' . $manager_address . ', ig.sz.: ' . $manager_id . ', an.neve: ' . $manager_mother_name . ')' .
-		', mint Bérlő, ' .
+		', mint Megbízó, ' .
 		"\n" .
-		'	másrészről ' . $contractor_landlord_name . ' (' . $contractor_landlord_address . ', ig.sz.: ' . $contractor_landlord_id . ', an.neve: ' . $contractor_landlord_mother_name . ') ' .
-		'mint Bérbeadó között a mai napon az alábbiak szerint:' .
+		'	másrészről ' . $contractor_name . ' (' . $contractor_address . ', cégj: ' . $contractor_company_id . ') ' .
+		', képviseli: ' . $contractor_manager_name . ' (' . $contractor_manager_address . ', ig.sz.: ' . $contractor_manager_id . ', an.neve: ' . $contractor_manager_mother_name . ')' .
+		', mint Megbízott között a mai napon az alábbiak szerint:' .
 		"\n"
 	),
 	$baseFont
 );
 $section->addText(
     htmlspecialchars(
-        '	1. Bérbeadó bérbe adja, Bérlő bérbe veszi a Bérbeadó 1035 Budapest, Miklós utca 13. 8/42 ingatlant (hrsz: 18267/6/A/394) a jelen szerződésben foglalt feltételekkel.' .
+        '	1. Megbízott hozzájárul, hogy Megbízó székhelyként tüntesse fel a 1035 Budapest, Miklós utca 13. 8/42 ingatlant (hrsz: 18267/6/A/394) a jelen szerződésben foglalt feltételekkel.' .
         "\n" .
-        '	2. Bérbeadó hozzájárul, hogy Bérlő székhelyként tüntesse fel az 1. pontban megjelölt ingatlant.' .
+        '	2. Megbízó tudomásul veszi, hogy az 1. pontban megjelölt cím más cégek székhelyeként is szerepel, illetve Megbízó további cégekkel is köthet szerződést a fenti ingatlanra vonatkozóan, a Megbízó jelen szerződésből fakadó jogainak korlátozása nélkül. ' .
         "\n" .
-        '	3. Bérlő tudomásul veszi, hogy az 1. pontban megjelölt cím más cégek székhelyeként is szerepel, illetve Bérbeadó további cégekkel is köthet bérleti szerződést a fenti ingatlanra vonatkozóan, a Bérlő jelen szerződésből fakadó jogainak korlátozása nélkül. ' .
+        '	3. Megbízó a bérleménybe sem ideiglenesen, sem állandó jelleggel, sem természetes, sem másik jogi személyt nem jelenthet be, azt tovább albérletbe/bérbe nem adhatja.' .
         "\n" .
-        '	4. Bérlő a bérleménybe sem ideiglenesen, sem állandó jelleggel, sem természetes, sem másik jogi személyt nem jelenthet be, azt tovább albérletbe/bérbe nem adhatja.' .
+        '	4. A Megbízott jogosult a szerződés meghosszabbításától indoklás nélkül elállni' .
         "\n" .
-        '	5. A Bérbeadó jogosult a szerződés meghosszabbításától indoklás nélkül elállni' .
+        '	5. A Megbízó súlyos szerződésszegése esetén a Megbízott felmondhatja a szerződést. Ebben az esetben a Megbízott a székhely törlését a cégnyilvántartásból kérheti.' .
         "\n" .
-        '	6. A Bérlő súlyos szerződésszegése esetén a Bérbeadó felmondhatja a bérleti szerződést. Ebben az esetben a Bérbeadó a székhely törlését a cégnyilvántartásból kérheti.' .
+        '	6. A Megbízó nem jogosult jelen szerződésből fakadó jogait harmadik fél részére átengedni.' .
         "\n" .
-        '	7. Bérlő nem jogosult jelen szerződésből fakadó jogait harmadik fél részére átengedni.' .
+        '	7. Megbízott jogosult jelen szerződésből fakadó jogait harmadik fél részére átengedni, ha az nem sérti Bérlőt szerződéses jogainak gyakorlásában' .
         "\n" .
-        '	8. Bérbeadó jogosult jelen szerződésből fakadó jogait harmadik fél részére átengedni, ha az nem sérti Bérlőt szerződéses jogainak gyakorlásában' .
+        '	8. A Megbízó mulasztásából, tevékenységéből, ügyviteléből, szerződésszegéséből eredő károkért, a Megbízott sem anyagi, sem erkölcsi felelősséget nem vállal.' .
         "\n" .
-        '	9. A Bérlő mulasztásából, tevékenységéből, ügyviteléből, szerződésszegéséből eredő károkért, a Bérbeadó sem anyagi, sem erkölcsi felelősséget nem vállal.' .
+        '	9. A Megbízó biztosítja a cég részére, hogy a cég döntéseit, határozatait a székhelyen meghozhassa és ezzel a GT által előírt feltételeknek eleget tegyen.' .
         "\n" .
-        '	10. A Bérbeadó biztosítja a cég részére, hogy a cég döntéseit, határozatait a székhelyen meghozhassa és ezzel a GT által előírt feltételeknek eleget tegyen.' .
+        '	10. Jelen szerződés kizárólag közös megegyezéssel módosítható. A szerződésmódosításban a felek tetszőlegesen módosíthatják a szerződés bármely rendelkezését.' .
         "\n" .
-        '	11. Jelen szerződés kizárólag közös megegyezéssel módosítható. A szerződésmódosításban a felek tetszőlegesen módosíthatják a szerződés bármely rendelkezését.' .
+        '	11. A felek közösen megállapodhatnak, hogy a Megbízott személyes jelenlétre előre egyeztetett időpontban, munkaidőben díjazás ellenében munkahelyet és/vagy tárgyalót biztosít a Megbízónak. A Megbízott nem köteles olyan helyiséget biztosítani, amely kizárólag a Megbízó által használható. Amennyiben a Megbízónak a kért időpontban munkahely és/vagy tárgyaló nem biztosítható, akkor a Megbízó köteles más címen levő munkahelyről/tárgyalóról gondoskodni.' .
         "\n" .
-        '	12. Jelen szerződést egyoldalúan csak a Bérbeadó mondhatja fel a Bérlő súlyos szerződésszegése, vagy olyan körülmények bekövetkezése esetén, amelyek megakadályozzák a Bérbeadó kötelezettségeinek teljesítését.' .
-        "\n" .
-        '	13. A felek közösen megállapodhatnak, hogy a Bérbeadó személyes jelenlétre előre egyeztetett időpontban, munkaidőben díjazás ellenében munkahelyet és/vagy tárgyalót biztosít a Bérlőnek. Bérbeadó nem köteles olyan helyiséget biztosítani, amely kizárólag Bérlő által használható. Amennyiben a Bérlőnek a kért időpontban munkahely és/vagy tárgyaló nem biztosítható, akkor a Bérlő köteles más címen levő munkahelyről/tárgyalóról gondoskodni.' .
-        "\n" .
-        '	14. A cég vezetésében beállt változást a Bérlő 15 napon belül köteles bejelenteni a Bérbeadónak.' .
+        '	12. A cég vezetésében beállt változást a Megbízó 15 napon belül köteles bejelenteni a Megbízottnak.' .
+    	"\n" .
+    	'	13. A Megbízó tudomásul veszi, hogy a Nemzeti Adó-és Vámhivatal felé a 201T nyomtatványon keresztül jeleznie kell, hogy székhelszolgáltatót vesz igénybe.' .
+    	"\n" .
+    	'	14. A Megbízó az 1. pontban megjelölt ingatlanban ingósággal nem rendelkezik, mindennemű ingóság a Megbzott tulajdonát képezi' .
     	"\n" .
     	"\n"
     ),
@@ -203,7 +204,7 @@ $section->addText(
 		'Budapest, ' . $starting_date .
 		"\n" .
 		"\n" .
-		'Bérlő: ......................................' . '		' . 'Bérbeadó: ......................................' .
+		'Megbízó: ......................................' . '		' . 'Megbízott: ......................................' .
 		"\n"
 	),
 	$baseFont
@@ -213,7 +214,7 @@ $section->addPageBreak();
 /*****************************************************************************
 CONTENT OF PAGE 2
 *****************************************************************************/
-
+/*
 $section->addText(
 	htmlspecialchars(
 		'SZÉKHELYHASZNÁLATI SZERZŐDÉS DÍJSZABÁS/FUTAMIDŐ' .
@@ -255,7 +256,7 @@ $section->addText(
 	$baseFont
 );
 $section->addPageBreak();
-
+*/
 /*****************************************************************************
 CONTENT OF PAGE 3
 *****************************************************************************/
@@ -267,6 +268,7 @@ $section->addText(
 	),
 	$titleFont
 );
+/*
 $section->addText(
 	htmlspecialchars(
 		'	amely létrejött egyrészről ' .
@@ -282,6 +284,7 @@ $section->addText(
 	),
 	$baseFont
 );
+*/
 $section->addText(
     htmlspecialchars(
         '	1. A Megbízott (2006. évi V. tv. 31. § (3) szerinti) kézbesítési megbízott feladatokat nem vállal.' .
@@ -292,28 +295,24 @@ $section->addText(
  		"\n" .
  		'	4. A Megbízott a Megbízó cégének nevét a 1035 Budapest, Miklós utca 13 8/42 tartozó ingatlan homlokzatán feltűnteti.' .
  		"\n" .
- 		'	5. Megbízó nem jogosult jelen szerződésből fakadó jogait harmadik fél részére átengedni.' .
-    	"\n" .
-    	'	6. Megbízott jogosult jelen szerződésből fakadó jogait harmadik fél részére átengedni, ha az nem sérti Megbízót szerződéses jogainak gyakorlásában' .
+ 		'	5. Megbízó a névváltoztatás jogát fenntartja. A névváltozást 15 napon belül be kell jelentenie Megbízottnak.' .
  		"\n" .
- 		'	7.	Jelen szerződés kizárólag közös megegyezéssel módosítható. A szerződésmódosításban a felek tetszőlegesen módosíthatják a szerződés bármely rendelkezését.' .
+ 		'	6. A Megbízott cégiratokat nem őriz. A cég iratainak őrzési címe: ' . $document_holder . ', ' . $document_holder_address .
  		"\n" .
- 		'	8. A Megbízott jogosult a szerződés meghosszabbításától indoklás nélkül elállni.' .
+ 		'	7. A Megbízó iratőrzési cím változás esetén köteles a változást a Megbízottnak bejelenteni' .
  		"\n" .
- 		'	9. Jelen szerződést egyoldalúan csak a Megbízott mondhatja fel, kizárólag olyan körülmények bekövetkezése esetén, amelyek megakadályozzák a Megbízott kötelezettségeinek teljesítését.' .
+ 		'	8. A Megbízó a cégbejegyzést követően 5 munkanapon belül leadja a következőket: postai meghatalmazás, társasági szerződés, cégbírósági végzés, aláírási címpéldány. A Megbízó tudomásul veszi, hogy ezen iratok leadásának hiányából származó károkért a Megbízott nem vállal felelősséget.' .
  		"\n" .
- 		'	10. Megbízó a névváltoztatás jogát fenntartja. A névváltozást 15 napon belül be kell jelentenie Megbízottnak.' .
+ 		'	9. A cég vezetésében beállt változást a Megbízó 15 napon belül köteles bejelenteni. Ugyancsak köteles ekkor új aláírási címpéldányt, társasági szerződést, cégbírósági végzést és postai meghatalmazást biztosítani Megbízottónak. A Megbízó tudomásul veszi, hogy a változás bejelentésének hiányából és a fent említett iratok leadásának hiányából származó károkért a Megbízott nem vállal felelősséget.' .
  		"\n" .
- 		'	11. A Megbízott cégiratokat nem őriz. A cég iratainak őrzési címe: ' . $document_holder . ', ' . $document_holder_address .
+ 		'	10. Amennyiben a Megbízó a székhelyét a futamidő lejárta előtt a 1035 Budapest, Miklós utca 13 8/42 címről áthelyezi, a szerződés megszűnik, a befizetett megbízási/cégképviseleti díj nem jár vissza.' .
  		"\n" .
- 		'	12. A Megbízó iratőrzési cím változás esetén köteles a változást a Megbízottnak bejelenteni' .
- 		"\n" .
- 		'	13. A Megbízó a cégbejegyzést követően 5 munkanapon belül leadja a következőket: postai meghatalmazás, társasági szerződés, cégbírósági végzés, aláírási címpéldány. A Megbízó tudomásul veszi, hogy ezen iratok leadásának hiányából származó károkért a Megbízott nem vállal felelősséget.' .
- 		"\n" .
- 		'	14. A cég vezetésében beállt változást a Megbízó 15 napon belül köteles bejelenteni. Ugyancsak köteles ekkor új aláírási címpéldányt, társasági szerződést, cégbírósági végzést és postai meghatalmazást biztosítani Megbízottónak. A Megbízó tudomásul veszi, hogy a változás bejelentésének hiányából és a fent említett iratok leadásának hiányából származó károkért a Megbízott nem vállal felelősséget.' .
- 		"\n" .
- 		'	15. Amennyiben a Megbízó a székhelyét a futamidő lejárta előtt a 1035 Budapest, Miklós utca 13 8/42 címről áthelyezi, a szerződés megszűnik, a befizetett megbízási/cégképviseleti díj nem jár vissza.' .
- 		"\n" .
+		'	11. A szerződés lejártakor/megszűnésekor a Megbízó köteles székhelyét áthelyezni, és azt bejelenteni az illetékes hatóságoknak.' .
+		"\n" .
+		'	12. A szerződés megszűnésével a Megbízottnak jogában áll a székhely megszűnést jelezni a hatóságok és a Megbízó partnerei felé. ' .
+		"\n" .
+		'	13. Amennyiben a Megbízó nem tesz eleget a 11. pontban előírt kötelezettségének, a Megbízott jogosult a cégbíróságon eljárni és a cég törlését kezdeményezni.' .
+		"\n" .
  		"\n"
    ),
     $baseFont
