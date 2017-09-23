@@ -159,6 +159,31 @@ switch($type){
 		}
 	
 	break;
+
+	case "reportusingservice":
+	
+		for($i = 0; $i < count($company_id_list); $i++){
+			$q1 = 'SELECT company_id, company_email, manager_name, ending_date, price_of_serv_num, service_provider FROM companies_detailed WHERE id = ' . $company_id_list[$i];
+			$query_1 = $pdo->query($q1);
+			$result_1 = $query_1->fetchAll(PDO::FETCH_ASSOC);
+			$id = $result_1[0]['company_id'];
+			$q2 = 'SELECT company_name FROM companies WHERE id = ' . $id;
+			$query_2 = $pdo->query($q2);
+			$result_2 = $query_2->fetchAll(PDO::FETCH_ASSOC);
+			$list_of_companies .= $result_2[0]["company_name"];
+			$list_of_companies .= "\r\n";
+			$to = $result_1[0]['company_email'];
+			$message = "Tisztelt " . $result_1[0]["manager_name"] . "!";
+			$message .= "\r\n";
+			$message .= "Kérem ne felejtse el, hogy szeptember 29. a határidő a cégeknek bejelenteni a NAV fele a 17T201T nyomtatványon keresztul ha székhelyszolgáltatást vesznek igenybe.";
+			$message .= "\r\n";
+			$message .= "Amennyiben még nem tette meg (vagy bizonytalan) keresse a könyvelőjet, hogy benyújották-e a nyomtatványt.";
+			$subject = iconv("UTF-8", "ISO-8859-2", $subject);
+			$message = iconv("UTF-8", "ISO-8859-2", $message);
+
+			mail($to, $subject, $message, $header);
+
+		}
 }
 
 $toAdmin = 'info@szekhelyszolgaltatas.com';

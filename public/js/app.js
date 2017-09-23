@@ -481,6 +481,11 @@ FORM /EMAIL
 				$scope.selectedCompanies.type = "lastwarning";
 				$scope.selectedCompanies.subject = 'Utolsó figyelmeztetés';
 				break;
+
+				case('Bejelentési kötelezettség'):
+				$scope.selectedCompanies.type = "reportusingservice";
+				$scope.selectedCompanies.subject = 'Bejelentési kötelezettség';
+				break;
 			}
 
 			Database.mailToSelectedCompanies($scope.selectedCompanies, function(response){
