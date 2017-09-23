@@ -175,9 +175,23 @@ switch($type){
 			$to = $result_1[0]['company_email'];
 			$message = "Tisztelt " . $result_1[0]["manager_name"] . "!";
 			$message .= "\r\n";
-			$message .= "Kérem ne felejtse el, hogy szeptember 29. a határidő a cégeknek bejelenteni a NAV fele a 17T201T nyomtatványon keresztul ha székhelyszolgáltatást vesznek igenybe.";
+			$message .= "\r\n";
+			$message .= "Kérem ne felejtse el, hogy szeptember 29. a határidő a cégeknek bejelenteni a NAV felé a 17T201T nyomtatványon keresztül ha székhelyszolgáltatást vesznek igenybe.";
 			$message .= "\r\n";
 			$message .= "Amennyiben még nem tette meg (vagy bizonytalan) keresse a könyvelőjet, hogy benyújották-e a nyomtatványt.";
+			$message .= "\r\n";
+			$message .= "Üdvözlettel";
+			$message .= "\r\n";
+			$message .= "Zeller-Daczi Gábor / Zeller Ildikó Anna";
+			$message .= "\r\n";
+			$message .= "1035 Budapest, Miklós utca 13. 8/42";
+			$message .= "\r\n";
+			$message .= "06-70/777-51-82";
+			$message .= "\r\n";
+			$message .= "06-1/501-40-58";
+			$message .= "\r\n";
+			$message .= "http://szekhelyszolgaltatas.com";
+			$message .= "\r\n";
 			$subject = iconv("UTF-8", "ISO-8859-2", $subject);
 			$message = iconv("UTF-8", "ISO-8859-2", $message);
 
